@@ -1,0 +1,20 @@
+@import url(https://cdn.jsdelivr.net/npm/pretty-print-json@1.1/dist/pretty-print-json.css);
+
+.schedule-status {
+  .display-type {
+    margin-right: 20px;
+  }
+}
+
+.area-example {
+    margin-bottom: 20px;
+    .style-json-example {
+        cursor: pointer;
+        margin-right: 20px;
+        font-style: italic;
+        text-decoration: underline;
+    }
+}
+.card-main-content {
+  min-height: calc(100vh - 155px);
+}

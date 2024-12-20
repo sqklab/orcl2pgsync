@@ -1,0 +1,44 @@
+<div class="body-login">
+  <div class="d-flex flex-column justify-content-center align-items-center card-container">
+    <div class="card p-3 login-card shadow-lg">
+      <div class="card-body">
+        <h4 class="card-title text-center">Data Synchronization</h4>
+
+        <div class="mb-4">
+          <label class="form-label required">Username</label>
+          <input type="text" class="form-control" (keyup.enter)="handleLogin()" placeholder="Username" [(ngModel)]="account.username" maxlength="50">
+        </div>
+        <div class="mb-4">
+          <label class="form-label required">Password</label>
+          <input type="password" class="form-control" (keyup.enter)="handleLogin()" placeholder="Password" [(ngModel)]="account.password" maxlength="50">
+        </div>
+        <div *ngIf="errorInvalid" class="row justify-content-center mt-2">
+          <div class="text-danger ">
+            Invalid Username or Password
+          </div>
+        </div>
+        <div *ngIf="errorRequired" class="row justify-content-center mt-2">
+          <div class="text-danger">
+            Username/Password is required!
+          </div>
+        </div>
+        <div class="justify-content-center actions">
+          <div class="text-center">
+            <button class="btn btn-outline-primary btn-signin" (click)="handleLogin()">Sign in</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="isLoading" class="spinner show">
+  <div class="spinner-border " role="status">
+    <span class="sr-only"></span>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="modal-backdrop fade show modal-backdrop-spinner show"></div>
+
+<div class="footer bg-white d-flex justify-content-center">Copyright 2022 &copy; MEGAZONE CLOUD Corp. All Right Reserved.</div>

@@ -1,0 +1,56 @@
+<nav aria-label="breadcrumb" class="border-bottom shadow-sm bg-white p-3">
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item cursor-pointer" (click)="goBack()"><a><span class="fa fa-arrow-left mr-2"></span> Back |</a></li>
+    <li class="breadcrumb-item no-before"><a href="#">Home</a></li>
+    <li class="breadcrumb-item" aria-current="page"><a routerLink="/dbconfig">Datasource management</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+  </ol>
+</nav>
+
+<div class="m-3 card card-body">
+  <div class="card-main-content">
+    <div class="row col-md-12 col-xl-6 m-auto py-5">
+      <div class="form-group">
+        <label class="control-label required" for="serverName">Server Name</label>
+        <input class="form-control" type="text" id="serverName" [(ngModel)]="serverName" placeholder="Server Name">
+      </div>
+      <div class="form-group">
+        <label class="control-label required" for="url">Url</label>
+        <input class="form-control" type="text" id="url" [(ngModel)]="url" placeholder="url">
+      </div>
+      <div class="form-group">
+        <label class="control-label required" for="username">Username</label>
+        <input class="form-control" type="text" id="username" [(ngModel)]="username" placeholder="Username">
+      </div>
+      <div class="form-group">
+        <label class="control-label required" for="password">Password</label>
+        <input class="form-control" type="text" id="password" [(ngModel)]="password" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <label for="maxPoolSize">Max PoolSize</label>
+        <input class="form-control" type="text" id="maxPoolSize" [(ngModel)]="maxPoolSize" placeholder="Max PoolSize">
+      </div>
+      <div class="form-group">
+        <label for="idleTimeout">Idle Timeout</label>
+        <input class="form-control" type="text" id="idleTimeout" [(ngModel)]="idleTimeout" placeholder="Idle Timeout">
+      </div>
+      <div class="form-group">
+        <label for="driverClassName">Driver ClassName</label>
+        <input class="form-control" type="text" id="driverClassName" [(ngModel)]="driverClassName" placeholder="Driver ClassName">
+      </div>
+      <div class="form-group">
+        <input type="checkbox" class="mb-2" id="isPending" [(ngModel)]="isPending" [checked]="isPending" (click)="setPending($event)"/> &nbsp;&nbsp;Is Pending (If checked - Application will not
+        initialize
+        this datasource at startup)
+      </div>
+      <div class="btns">
+        <button type="button" class="btn btn-outline-primary add-new" (click)="upSert()">{{isEdit ? 'Update' : 'Create'}}</button>
+        <button type="button" class="btn btn-outline-primary " routerLink="/dbconfig">Cancel</button>
+        <button type="button" class="btn btn-outline-primary test-connection" (click)="testConnection()">
+          <span [class.fa-spinner]="testing" class="fa fa-spin mr-2"></span>
+          Test Connection
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

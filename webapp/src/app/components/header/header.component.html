@@ -1,0 +1,68 @@
+<div class="container-fluid p-0">
+  <nav class="navbar navbar-expand-lg fixed-top navbar-light px-3 custom-navbar">
+    <div class="container-fluid gx-1">
+      <div>
+        <a class="navbar-brand" style="width: 200px" [routerLink]="['/synchronize']" routerLinkActive="router-link-active">{{'home.title' | translate }}</a>
+        <span class="fa fa-bars cursor-pointer" (click)="toggle()" title="Toggle menu"></span>
+      </div>
+        <div class="group-menu">
+          <div class="dropdown lang">
+            <div class="dropdown-toggle cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="assets/image/korea.png" class="flag kr" *ngIf="language == 'kr'">
+              <img src="assets/image/us.png" class="flag" *ngIf="language == 'en'">
+              Language
+            </div>
+            <ul class="dropdown-menu">
+              <li>
+                <span class="dropdown-item cursor-pointer" (click)="changeLang('kr')">
+                  <img src="assets/image/korea.png" class="flag kr">Korea</span>
+                <span class="dropdown-item cursor-pointer" (click)="changeLang('en')">
+                  <img src="assets/image/us.png" class="flag">English</span>
+              </li>
+            </ul>
+          </div>
+          <div class="dropdown account">
+            <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-fill"></i> {{ credential["username"] }}
+            </div>
+            <ul class="dropdown-menu" style="left: -20px;">
+              <li>
+                <span class="dropdown-item" (click)="handleLogout()">
+                  <i class="bi bi-box-arrow-right"></i> Logout</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  </nav>
+
+  <div class="d-flex flex-column">
+      <ul class="nav flex-column bg-white menu shadow-sm p-1" [style.display]="sideBarShow? 'block': 'none'">
+        <li class="nav-item" *ngFor="let route of routes; let i = index">
+          <div *ngIf="route.children.length === 0">
+            <a class="nav-link {{ 'active' }}" aria-current="page" [routerLink]="[route.path]"
+              [routerLinkActive]="['activeMenu']">
+              <i class="bi {{ route.icon }} me-2 "></i>{{ route.name }}</a>
+          </div>
+
+        </li>
+      </ul>
+      <div class="main-body" [class.collapse-main]="!sideBarShow">
+        <div class="kafka-message" *ngIf="kafkaStatus">
+          <div  [innerHTML]="kafkaStatus | kafkaStatus"></div>
+        </div>
+        <ng-content></ng-content>
+      </div>
+    <app-footer></app-footer>
+  </div>
+
+  <div *ngIf="isLoading" class="spinner show">
+    <div class="spinner-border " role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+</div>
+<div *ngIf="isLoading" class="modal-backdrop fade show modal-backdrop-spinner show"></div>
+<app-modal *ngIf="isShowModal" [isShow]="isShowModal" [type]="modalProp.type" [title]="modalProp.title"
+  [message]="modalProp.message" [titleOfCheckBox]="modalProp.titleOfCheckBox" [isShowCheckBox]="modalProp.isShowCheckBox" [cancel]="modalProp.cancel" (closeModal)="modalProp.closeModal()"
+  (confirm)="modalProp.confirm()" (confirmDeleteKakaConnector)="modalProp.confirmDeleteKafkaConnector($event)"></app-modal>

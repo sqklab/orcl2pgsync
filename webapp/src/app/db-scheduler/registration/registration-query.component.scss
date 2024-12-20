@@ -1,0 +1,214 @@
+.card-main-content {
+  min-height: calc(100vh - 300px);
+}
+.sql-col {
+  max-width: 400px;
+  word-wrap: break-word;
+  .sync-name-info {
+  display: flex;
+  justify-content: space-between;
+  cursor: default;
+}
+}
+.ellipsis-name {
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-search {
+    position: relative;
+    .bi-x {
+        position: absolute;
+        right: 25px;
+        top: 6px;
+        cursor: pointer;
+    }
+    #typeahead-focus:hover {
+        .bi-x {
+            display: block;
+        }
+    }
+}
+
+.registration-container {
+  .form label {
+    width: 80px;
+  }
+    .left {
+        display: flex;
+        flex-direction: column;
+        width: 40%;
+        & > div {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+    }
+
+    .schedule-footer {
+        text-align: center;
+    }
+    .error-input {
+        color: red;
+        margin-bottom: 20px;
+    }
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    a {
+        cursor: pointer;
+    }
+    button {
+        position: relative;
+        background-color: transparent;
+    }
+    &:hover {
+        i {
+            display: flex;
+        }
+    }
+    .active {
+        background-color: cadetblue;
+    }
+}
+
+.active-day-tab {
+    .add-new-schedule {
+        margin-top: 10px;
+        text-align: right;
+    }
+}
+
+.schedule-items {
+    max-height: 400px;
+    //min-height: 300px;
+    overflow: auto;
+}
+
+.active-scheduler-tab {
+    padding-left: 13px;
+    .day-of-week-header {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0 52px;
+        margin-bottom: 20px;
+        & > span {
+          font-size: .9em;
+            border: 1px solid gray;
+            border-radius: 50%;
+            width: 35px; height: 35px;
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .active {
+            background-color: cadetblue;
+            color: white;
+            border: 1px solid cadetblue;
+            transform: scale(1.2);
+        }
+    }
+    .day-of-week-body {
+        max-height: 400px;
+        overflow: auto;
+    }
+    .add-new-schedule-dayofweek {
+        text-align: right;
+        margin-top: 20px;
+    }
+}
+
+.modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.schedule-status {
+    input[type="radio"] {
+        margin-right: 5px;
+    }
+    label {
+        margin-right: 10px;
+    }
+}
+
+.error-msg {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.group-header {
+    background-color: #00000045;
+}
+
+.filter-status {
+    display: inline-block;
+    padding: 3px;
+    cursor: pointer;
+    width: 100px;
+    text-align: center;
+}
+
+.small-cold {
+    width: 150px;
+}
+
+.large-cold {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+}
+
+.bi {
+    cursor: pointer;
+}
+
+.input-day {
+    width: 50px;
+}
+
+.group-monthy {
+    display: flex;
+    align-items: center;
+    gap: 0 10px;
+}
+
+.monthy-lastday {
+    gap: 0 10px;
+    width: 150px;
+}
+
+.quarterly {
+    .quarterly-row > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 0 10px;
+    }
+    span {
+        margin-right: 5px;
+    }
+    .lastday {
+        margin-left: 5px;
+    }
+}
+
+.schedule-item-group {
+    width: 180px;
+}
+
+.day-of-month-body {
+    display: flex;
+    flex-direction: column;
+
+}

@@ -1,0 +1,63 @@
+spring.profiles.active: local
+
+---
+spring:
+  config:
+    activate.on-profile: local,test,integrationTest
+  cloud:
+    config:
+      enabled: false
+---
+spring:
+  config:
+    activate.on-profile: stp
+    import: optional:configserver:${CONFIG_SERVER:http://arishem.up.internal:80/}
+
+---
+spring:
+  config:
+    activate.on-profile: prd
+    import: optional:configserver:${CONFIG_SERVER:http://arishem.up.internal:80/}
+
+---
+spring:
+  application:
+    name: dbsync
+  cloud:
+    config:
+      name: ${spring.application.name}
+      profile: ${spring.profiles.active}
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    properties:
+      hibernate:
+        types:
+          print:
+            banner: false
+        jdbc:
+          batch_size: 20
+        order_updates: true
+        order_inserts: true
+
+log-viewer:
+  accessible-files:
+    pattern: /var/log/dbsync/logs
+
+debezium:
+  version: 1.9.7.Final
+
+comparison:
+  thread: 10 # N
+  queue-capacity: 1000
+  query-timeout-seconds: 60
+  retry:
+    wait-interval-each-seconds: 90 # L
+    count: 3 # J
+    condition:
+      difference:
+        max: 100 # K
+    message:
+      limit: 20
+
+config-exchanger.aws-parameter-store.enabled: true

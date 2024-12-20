@@ -1,0 +1,73 @@
+<diV class="card card-body border-top-0">
+  <div class="card card-body">
+    <div class=" d-flex justify-content-between">
+      <div class="text-center">
+        <div class="d-flex align-items-center">
+          <label class="me-2">DB:</label>
+          <app-auto-complete [items]="dbName"
+                             [chooseItem]="selectedDB"
+                             (clearSelected)="handleSelectDB('')"
+                             (selectedItem)="handleSelectDB($event)">
+          </app-auto-complete>
+
+        </div>
+      </div>
+      <div class="text-center">
+        <div class="d-flex align-items-center">
+          <label class="me-2">Publication:</label>
+          <app-auto-complete [items]="publications"
+                             [chooseItem]="selectedPublication"
+                             (clearSelected)="selectedPublication=''"
+                             (selectedItem)="handleSelectPublication($event)">
+          </app-auto-complete>
+
+        </div>
+      </div>
+      <div class="text-center">
+        <div class="d-flex align-items-center">
+          <label class="me-2">Table:</label>
+          <input class="form-control" name="dp" [(ngModel)]="tableSearch" #SearchInput>
+        </div>
+      </div>
+      <div class="text-center">
+        <div class="d-flex align-items-center justify-content-sm-end search-area">
+          <button type="button" class="btn btn-outline-primary mr-md" (click)="showPopupAdding()">Add</button>
+          <button type="button" class="btn btn-outline-primary" (click)="onDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</diV>
+
+<div class="card card-body mt-3 card-main-content">
+    <div>
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th class="text-center" scope="col"><input class="" type="checkbox" [checked]="getCheckAllItem()" id="checkboxNoLabel" (click)="selectItemAllItems($event)"/></th>
+          <th class="text-center" scope="col">Publication name</th>
+          <th class="text-center" scope="col">Schema name</th>
+          <th class="text-center" scope="col">Table name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let doc of tables" style="height: 51px;" (dblclick)="dbclickToEdit(doc.id)">
+          <td class="text-center">
+            <input class="" type="checkbox" [checked]="doc.checked" (click)="selectItem($event, doc)"/>
+          </td>
+          <td class="topic-name-col">
+            {{doc.name}}
+          </td>
+          <td class="topic-name-col">
+            {{doc.schemaName}}
+          </td>
+          <td class="topic-name-col">
+            {{doc.table}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="no-data" *ngIf="total===0">No data</div>
+      <app-pavigation [totalPage]="total" [currentPage]="pageNo" (onChangePage)="handleChangePage($event)"></app-pavigation>
+    </div>
+</div>

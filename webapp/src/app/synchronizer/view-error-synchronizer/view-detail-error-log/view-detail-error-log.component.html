@@ -1,0 +1,72 @@
+<nav aria-label="breadcrumb" class="border-bottom shadow-sm bg-white p-3">
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item cursor-pointer" (click)="goBackHistory()"><a><span class="fa fa-arrow-left mr-2"></span> Back |</a></li>
+    <li class="breadcrumb-item no-before"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">View Detail Error Message</li>
+  </ol>
+</nav>
+
+<div class="card card-body m-3">
+  <div #TD_TOPICNAME>
+    <button type="button" class="btn btn-outline-primary mr-5" (click)="resolve()">Resolve</button>
+  </div>
+</div>
+
+<div class="card card-body m-3">
+  <table>
+    <tr>
+      <td class="td-header">Topic</td>
+      <td><a class="cursor-pointer" (click)="onClickTopic(syncInfo.topicName)">{{syncInfo.topicName}}</a></td>
+    </tr>
+    <tr>
+      <td class="td-header">Error type</td>
+      <td>{{syncInfo.errorType}}</td>
+    </tr>
+    <tr>
+      <td class="td-header">Error time</td>
+      <td>{{syncInfo.errorTime | date: 'yyyy.MM.dd / HH:mm' }}</td>
+    </tr>
+    <tr>
+      <td class="td-header">Kafka message</td>
+      <td class="td-msg-kafka">
+        <div style="word-break: break-all;">
+          <pre id="message-kafka" [style.width.px]="TD_TOPICNAME.offsetWidth - 200"></pre>
+        </div>
+        <i class="bi bi-clipboard icon-msg-kafka" ngbTooltip="Copy" (click)="copyMsgKafka()"></i>
+      </td>
+    </tr>
+    <tr>
+      <td class="td-header">SQL Redo</td>
+      <td>
+        <div class="sql-redo-style" *ngIf="syncInfo.sqlRedo">
+          <div>{{syncInfo.sqlRedo}}</div>
+          <i class="bi bi-clipboard" ngbTooltip="Copy" (click)="copy(syncInfo.sqlRedo)"></i>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="td-header">SQL RD</td>
+      <td>
+        <div class="sql-redo-style" *ngIf="syncInfo.sqlRd">
+          <div>{{syncInfo.sqlRd}}</div>
+          <i class="bi bi-clipboard" ngbTooltip="Copy" (click)="copy(syncInfo.sqlRd)"></i>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="td-header">Error message</td>
+      <td>
+        <div style="word-break: break-all;">{{syncInfo.errorMessage}}</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="td-header">Error environment</td>
+      <td>{{syncInfo.environment}}</td>
+    </tr>
+    <tr>
+      <td class="td-header">Error version</td>
+      <td>{{syncInfo.errorVersion}}</td>
+    </tr>
+  </table>
+</div>
+

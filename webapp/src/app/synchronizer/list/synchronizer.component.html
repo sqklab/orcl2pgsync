@@ -1,0 +1,355 @@
+<nav aria-label="breadcrumb" class="border-bottom shadow-sm bg-white p-3">
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Synchronizer management</li>
+  </ol>
+</nav>
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="isToSlow">
+  <strong>Number Error/Resolved to much!</strong> Please remove some records!.
+  <span style="text-decoration: underline; cursor: pointer;" (click)="sortResolvedErrorLog()">Click here</span> to sort "Resolved Error", then delete all
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="isToSlow=false">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="content m-3">
+  <div class="card card-body">
+    <div class="toolbar flex-between-center mb-3">
+      <div class="left">
+        <button type="button" class="btn btn-outline-primary mr-5" (click)="addNew();"><i class="bi bi-plus-lg"></i>{{'synchronizer.btn.synchronizer.title' | translate}}</button>
+        <button type="button" class="btn btn-outline-primary mr-5" (click)="handleFileInput($event);"><i class="bi bi-upload"></i>Import</button>
+        <button type="button" class="btn btn-outline-primary mr-5" (click)="exportWithParams();"><i class="bi bi-download"></i>Export</button>
+      </div>
+      <div class="right">
+        <button type="button" class="btn btn-outline-primary mr-5" (click)="start()">Start</button>
+        <button type="button" class="btn btn-outline-primary mr-5" (click)="stop()">Stop</button>
+        <button type="button" class="btn btn-outline-primary mr-5" (click)="delete()">Delete</button>
+        <button type="button" class="btn btn-outline-primary" (click)="edit()">Edit</button>
+        <span class="spacer-line">|</span>
+        <button type="button" class="btn btn-outline-primary mr-5" (click)="stopAll()">Stop All</button>
+        <button type="button" class="btn btn-outline-primary" (click)="startAll()">Start All</button>
+        <span class="spacer-line">|</span>
+        <button type="button" class="btn btn-outline-primary" (click)="deleteAll()">Delete All</button>
+      </div>
+    </div>
+    <div class="card card-body pb-2 pt-4">
+      <div class="flex-between-center">
+        <div class="pe-5">
+          <div class="flex-between-center">
+            <div class="d-flex align-items-center">
+              <div class="me-2 date-label">Created Date</div>
+              <form class="form-inline">
+                <div class="form-group mb-0">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="yyyy-mm-dd"
+                           name="dp" [(ngModel)]="dateFrom" ngbDatepicker #d1="ngbDatepicker"
+                           aria-describedby="date-btn-addon">
+                    <button class="btn btn-outline-secondary btn-addon" id="date-btn-addon" (click)="d1.toggle()" type="button"><span class="fa fa-calendar"></span></button>
+                  </div>
+                </div>
+              </form>
+              <div class="mx-2">~</div>
+              <form class="form-inline">
+                <div class="form-group mb-0">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="yyyy-mm-dd"
+                           name="dp" [(ngModel)]="dateTo" ngbDatepicker #d2="ngbDatepicker"
+                           aria-describedby="date-btn-addon2">
+                    <button class="btn btn-outline-secondary btn-addon" id="date-btn-addon2" (click)="d2.toggle()" type="button"><span class="fa fa-calendar"></span></button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="ps-3 d-flex align-items-center">
+              <label class="me-2">DB</label>
+              <app-auto-complete [items]="allDBs"
+                                 [chooseItem]="selectedDB"
+                                 (clearSelected)="onClearSourceDB()"
+                                 (selectedItem)="selectedDB=$event">
+              </app-auto-complete>
+            </div>
+            <div class="ps-3 d-flex align-items-center">
+              <label class="me-2">Schema</label>
+              <app-auto-complete [items]="allSchemas"
+                                 [chooseItem]="selectedSchema"
+                                 (clearSelected)="onClearSourceSchema()"
+                                 (selectedItem)="selectedSchema=$event">
+              </app-auto-complete>
+            </div>
+            <div class="ps-3 d-flex align-items-center">
+              <label class="me-2">State</label>
+              <app-auto-complete [items]="states" [width]="100"
+                                 [chooseItem]="selectedState"
+                                 (clearSelected)="selectedState=''"
+                                 (selectedItem)="selectedState=$event">
+              </app-auto-complete>
+            </div>
+            <div class="ps-3 d-flex align-items-center">
+              <label class="me-2">Division</label>
+              <app-auto-complete [items]="division" [width]="100"
+                                 [chooseItem]="selectedDivision"
+                                 (clearSelected)="selectedDivision=''"
+                                 (selectedItem)="selectedDivision=$event">
+              </app-auto-complete>
+            </div>
+          </div>
+
+          <div class="flex-between-center">
+            <div class="d-flex align-items-center flex-grow-1">
+              <label class="me-2 date-label">Topics</label>
+              <app-chips style="width: 100%;" *ngIf="topicNames.length > 0" [selectedChips]="selectedTopicName" [allChips]="topicNames"></app-chips>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" (click)="onSearch()">Search</button>
+      </div>
+    </div>
+  </div>
+  <div class="result-area card card-body mt-3">
+    <div class="information">
+      <div class="info-text">
+        Running: <span (click)="filterState('RUNNING')" [ngClass]="selectedRunning ? 'seclected-state' : ''" class="text-success cursor-pointer">{{running}}</span>
+        Stopped: <span (click)="filterState('STOPPED')" [ngClass]="selectedStopped ? 'seclected-state' : ''" class="text-danger cursor-pointer">{{stopped}}</span>
+        Pending: <span (click)="filterState('PENDING')" [ngClass]="selectedPeding ? 'seclected-state' : ''" class="text-warning cursor-pointer">{{pending}}</span>
+        Linked: <span (click)="filterState('LINKED')" [ngClass]="selectedLinked ? 'seclected-state' : ''" class="text-success cursor-pointer">{{linked}}</span>
+        <i class="bi bi-x" *ngIf="selectedRunning || selectedStopped || selectedPeding || selectedLinked" (click)="clearFilterState()"></i>
+      </div>
+      <div class="setting">
+        <button type="button" class="btn btn-outline-primary mr-5" (click)="showLogSystem()">View Log</button>
+      </div>
+    </div>
+
+
+    <div class="alert alert-success alert-dismissible fade show" style="margin-top: 20px; margin-bottom: 20px" role="alert" *ngIf="offsetByDate !== ''">
+      Reset offset to: <span class="text-success font-weight-bold">{{offsetByDate}}. </span> Of topic: {{topicNameForUpdateOffset}}
+
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="offsetByDate = ''">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="alert alert-danger alert-dismissible fade show" style="margin-top: 20px; margin-bottom: 20px" role="alert" *ngIf="errorMsgOffset !== ''">
+      {{errorMsgOffset}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="errorMsgOffset = ''">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="show-table">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered mt-4">
+          <thead>
+          <tr>
+            <th class="text-center" scope="col"><input class="" type="checkbox" [checked]="getCheckAllItem()" id="checkboxNoLabel" (click)="selectItemAllItems($event)"/></th>
+            <th class="text-center" scope="col">Id</th>
+            <th class="text-center" scope="col">Synchronizer Name</th>
+            <th class="text-center" scope="col">Kafka Topic</th>
+            <th class="text-center" scope="col">State <i class={{sortState}} (click)="onSortState()"></i></th>
+            <th class="text-center" scope="col">Division</th>
+            <th class="text-center" scope="col">Error Log <i class={{sortIcon}} (click)="sortErrorLog()"></i></th>
+            <th class="text-center" style="width: 140px;" scope="col">Resolved Error<i class={{sortResolvedIcon}} (click)="sortResolvedErrorLog()"></i></th>
+            <th class="text-center" scope="col">Log</th>
+            <th class="text-center" scope="col">Last Received Time
+              <i class={{sortLastReceivedIcon}} (click)="sortLastReceivedTime()"></i>
+              <i class="bi bi-x" *ngIf="isSortLastReceivedTime" (click)="isSortLastReceivedTime = false"></i>
+            </th>
+            <th class="text-center" scope="col">Last Modified</th>
+            <th class="text-center" style="width: 120px;" scope="col">Reset Offset</th>
+            <th class="text-center" scope="col">Created User</th>
+            <th class="text-center" scope="col">Updated User</th>
+            <th class="text-center" scope="col">View History</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let doc of topics" style="height: 51px;" (dblclick)="dbclickToEdit(doc.id)">
+            <td class="text-center">
+              <input class="" type="checkbox" [checked]="doc.checked" (click)="selectItem($event, doc)" (mouseup)="onSelectionEnd($event, doc)"/>
+            </td>
+            <td class="topic-name-col">
+              {{doc.id}}
+            </td>
+            <td class="topic-name-col">
+              <div class="sync-name-info" ngbTooltip="{{doc.synchronizerName}}">
+                <span class="ellipsis-name">{{ doc.synchronizerName }}</span>
+                <span style="display: flex; align-items: center;">
+                    <i class="bi bi-info-circle" (click)="openSyncInfo(doc.id)"></i>
+                  </span>
+              </div>
+            </td>
+            <td class="topic-name-col">
+              <div class="sync-name-info"><span class="ellipsis-name">{{ doc.topicName }}</span></div>
+            </td>
+            <td class="text-center">
+              <span *ngIf="doc.state == 'RUNNING'" class="badge bg-success">{{doc.state}}</span>
+              <span *ngIf="doc.state == 'STOPPED'" class="badge bg-danger">{{doc.state}}</span>
+              <span *ngIf="doc.state == 'PENDING'" class="badge bg-secondary">{{doc.state}}</span>
+              <span *ngIf="doc.state == 'LINKED'" class="badge bg-success">{{doc.state}}</span>
+            </td>
+            <td class="division-col">
+              <div class="text-center"><span class="ellipsis-name">{{ doc.division }}</span></div>
+            </td>
+            <td class="text-center">
+              <a *ngIf="doc.numberOfError>0" class="number-error" (click)="viewError(doc.topicName)">{{doc.numberOfError}} errors</a>
+              <span *ngIf="doc.numberOfError===0">{{doc.numberOfError}} error</span>
+            </td>
+            <td class="text-center">
+              <a *ngIf="doc.numberOfResolve>0" style="cursor: pointer;" (click)="viewResolveds(doc.topicName)">
+                <span class="number-resolved">{{doc.numberOfResolve}} resolved</span>
+              </a>
+              <span *ngIf="doc.numberOfResolve===0">{{doc.numberOfResolve}} resolved</span>
+            </td>
+            <td class="text-center">
+              <a style="cursor: pointer;" ngbTooltip="{{doc.logFile}}" (click)="viewLog(doc.topicName)">
+                <span class="fa fa-file-text-o"></span>
+              </a>
+            </td>
+            <td class="last-msg-info-col">
+              <div class="last-msg-info">
+                <span class="ellipsis-name">{{doc.receivedDateTime | date: 'yyyy.MM.dd / HH:mm'}}</span>
+                <i class="bi bi-info-circle" (click)="openLastMsgInfo(lastMsgInfo, doc)"></i>
+              </div>
+            </td>
+            <td class="col-date text-center">
+              {{doc.updatedAt | date: 'yyyy.MM.dd / HH:mm'}}
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn btn-outline-primary" (click)="openResetOffset(viewResetOffset, doc)">Reset Offset</button>
+            </td>
+            <td class="topic-name-col">
+              <div class="sync-name-info"><span class="ellipsis-name">{{ doc.createdUser }}</span></div>
+            </td>
+            <td class="topic-name-col">
+              <div class="sync-name-info"><span class="ellipsis-name">{{ doc.updatedUser }}</span></div>
+            </td>
+            <td class="topic-name-col">
+              <div class="sync-name-info" ngbTooltip="{{doc.synchronizerName}}">
+                <button type="button" class="btn btn-outline-primary" (click)="openWatchHistory(viewHistory,doc)">Watch
+                  History
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="no-data" *ngIf="totalPage===0">No data</div>
+      </div>
+      <app-pavigation [totalPage]="totalPage" [currentPage]="currentPage" [pageSize]="pageSize"
+                      (onChangePage)="handleChangePage($event)"
+                      (onChangePageSize)="handleChangePageSize($event)"></app-pavigation>
+    </div>
+  </div>
+</div>
+
+<ng-template #lastMsgInfo let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title-last-msg">Last Message Info</h4>
+    <button type="button" class="close" aria-label="Close" (click)="onCloseModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body p-0">
+    <ul class="list-group w-100">
+      <li class="list-group-item flex-between-center">
+        <div>Last received date:</div>
+        <div *ngIf="viewLastMessageInfo">{{viewLastMessageInfo.receivedDate | date: 'yyyy.MM.dd'}}</div>
+      </li>
+      <li class="list-group-item flex-between-center">
+        <div>Last received time:</div>
+        <div *ngIf="viewLastMessageInfo">{{viewLastMessageInfo.receivedTime}}</div>
+      </li>
+      <li class="list-group-item flex-between-center">
+        <div>Last SCN:</div>
+        <div *ngIf="viewLastMessageInfo">{{viewLastMessageInfo.scn === 0 ? 'N/A' : viewLastMessageInfo.scn}}</div>
+      </li>
+      <li class="list-group-item flex-between-center">
+        <div>Last Commit SCN:</div>
+        <div *ngIf="viewLastMessageInfo">{{viewLastMessageInfo.commitScn === 0 ? 'N/A' : viewLastMessageInfo.commitScn}}</div>
+      </li>
+      <li class="list-group-item flex-between-center">
+        <div>Last Kafka Timestamp:</div>
+        <div *ngIf="viewLastMessageInfo">
+          {{(viewLastMessageInfo.msgTimestamp) ? (viewLastMessageInfo.msgTimestamp | date: 'yyyy.MM.dd / HH:mm' : '+9') : 'N/A' }}
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer d-flex justify-content-center">
+    <button type="button" class="btn btn-outline-primary" (click)="onCloseModal()">Cancel</button>
+  </div>
+</ng-template>
+
+<ng-template #viewResetOffset let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title-offset">Reset Offset</h4>
+    <button type="button" class="close" aria-label="Close" (click)="onCloseModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <span class="text-danger" *ngIf="isRunningSynchronizer">The consumer group has current state is STABLE. You need to stop all consumers before reset offset
+      <span style="text-decoration: underline; cursor: pointer;" (click)="quickStopAll()">. Click here to STOP all synchronizers</span>
+    </span>
+    <div class="form-group mt-3">
+      <label for="date">Date</label>
+      <div class="input-group container-date-check">
+        <input type="datetime-local" id="date" class="form-control" [disabled]="loadingBtnRun" [(ngModel)]="dateForUpdateOffset">
+      </div>
+    </div>
+
+    <div *ngIf="invalidDateInput && invalidDateInput !== ''">
+      <span class="text-danger">Offset not found for input date time </span>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button [disabled]="isRunningSynchronizer || loadingBtnRun" type="button" class="btn btn-outline-primary" (click)="onUpdateOffset()">
+      <span [class.fa-spinner]="loadingBtnRun" class="fa fa-spin ml-2"></span> Run
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #viewHistory let-modal >
+  <div class=" modal-header px-4" style=": 140px;">
+    <h4 class="modal-title" >Synchronizer History</h4>
+    <button type="button" class="close" aria-label="Close" (click)="onCloseModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class=" modal-body px-4">
+    <table class="table table-hover table-bordered mt-5">
+      <thead>
+      <tr>
+        <th class="text-center" scope="col">Synchronizer Id</th>
+        <th class="text-center" scope="col">Topic Name</th>
+        <th class="text-center" scope="col">Operation</th>
+        <th class="text-center" scope="col">Time</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let doc of history | async">
+        <td class="topic-name-col">
+          <div *ngIf="doc">{{doc.synchronizerId === 0 ? 'N/A' : doc.synchronizerId}}</div>
+        </td>
+        <td class="topic-name-col">
+          <div *ngIf="doc">{{doc.topic === 0 ? 'N/A' : doc.topic}}</div>
+        </td>
+        <td class="topic-name-col">
+          <div *ngIf="doc">{{doc.operation === 0 ? 'N/A' : doc.operation}} <i class="bi bi-info-circle" (click)="openSyncInfo(doc.synchronizerId)"></i></div>
+        </td>
+        <td>
+          <div *ngIf="doc">{{doc.time === 0 ? 'N/A' : doc.time}}</div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer d-flex justify-content-center px-4">
+    <button type="button" class="btn btn-outline-primary" (click)="onCloseModal()">Cancel</button>
+  </div>
+
+</ng-template>

@@ -1,0 +1,131 @@
+@import url(https://cdn.jsdelivr.net/npm/pretty-print-json@1.1/dist/pretty-print-json.css);
+.card-main-content {
+  min-height: calc(100vh - 230px);
+}
+.content {
+    .toolbar {
+        display: flex;
+        justify-content: space-between;
+        .left {
+            i {
+                margin-right: 5px;
+            }
+            .plus {
+                font-size: 13px;
+            }
+        }
+    }
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+        .date-area {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .search-area {
+        display: flex;
+        .text-search {
+            width: 500px;
+            margin-right: 20px;
+        }
+    }
+}
+
+.calendar {
+    width: 2.75rem;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAcCAYAAAAEN20fAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEUSURBVEiJ7ZQxToVAEIY/YCHGxN6XGOIpnpaEsBSeQC9ArZbm9TZ6ADyBNzAhQGGl8Riv4BLAWAgmkpBYkH1b8FWT2WK/zJ8ZJ4qiI6XUI3ANnGKWBnht2/ZBDRK3hgVGNsCd7/ui+JkEIrKtqurLpEWaphd933+IyI3LEIdpCYCiKD6HcuOa/nwOa0ScJEnk0BJg0UTUWJRl6RxCYEzEmomsIlPU3IPW+grIAbquy+q6fluy/28RIBeRMwDXdXMgXLj/B2uimRXpui4D9sBeRLKl+1N+L+t6RwbWrZliTTTr1oxYtzVWiTQAcRxvTX+eJMnlUDaO1vpZRO5NS0x48sIwfPc87xg4B04MCzQi8hIEwe4bl1DnFMCN2zsAAAAASUVORK5CYII=)!important;
+    background-repeat: no-repeat;
+    background-size: 23px;
+    background-position: 50%;
+    height: 100%;
+}
+
+.server-name {
+    max-width: 350px;
+    word-wrap: break-word;
+}
+
+.server-name-th {
+    width: 300px;
+}
+
+.url {
+    max-width: 400px;
+    word-wrap: break-word;
+}
+
+.checkbox-item {
+    width: 50px;
+}
+
+.col-state {
+    width: 90px;
+}
+.type {
+    width: 70px;
+}
+.action {
+    width: 280px !important;
+}
+
+.ellipsis-name {
+    max-width: 250px;
+    word-break: break-all;
+}
+
+.name-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-link-action {
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0 2px;
+}
+
+.col-date {
+    width: 135px !important;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    a {
+        cursor: pointer;
+    }
+    button {
+        position: relative;
+    }
+    &:hover {
+        i {
+            display: flex;
+        }
+    }
+}
+.table-config-detail {
+    table {
+        th {
+            min-width: 250px;
+            border-right: 1px solid #dee2e6;
+            font-weight: normal;
+        }
+        td {
+            padding-left: 5px;
+            word-break: break-all;
+        }
+    }
+}
+
+.trace-content {
+  cursor: pointer;
+  word-break: break-all;
+  max-width: 600px;
+  max-height: 100px;
+  overflow: hidden;
+}

@@ -1,0 +1,1 @@
+ALTER TABLE "tbl_sync_task_info" ADD max_poll_records integer;

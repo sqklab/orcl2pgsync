@@ -1,0 +1,180 @@
+<nav aria-label="breadcrumb" class="border-bottom shadow-sm bg-white p-3">
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Connector management</li>
+  </ol>
+</nav>
+<div class="content">
+  <div class="card card-body m-3">
+    <div class="toolbar">
+        <div class="left">
+            <button type="button" class="btn btn-outline-primary" (click)="addNew();"><i class="bi bi-plus-lg plus"></i>Add new</button>
+            <label class="spacer-line">|</label>
+            <button type="button" class="btn btn-outline-primary" (click)="synchronize();"><i class="bi bi-arrow-repeat"></i>Synchronize</button>
+            <label class="spacer-line">|</label>
+            <button type="button" class="btn btn-outline-primary" (click)="download();"><i class="bi bi-download"></i>Export all</button>
+        </div>
+        <div class="right">
+            <button type="button" class="btn btn-outline-primary" (click)="refresh()">Refresh</button>
+            <label class="spacer-line">|</label>
+            <button type="button" class="btn btn-outline-primary mr-5" (click)="stopAll()">Stop all</button>
+            <button type="button" class="btn btn-outline-primary" (click)="startAll()">Start all</button>
+            <label class="spacer-line">|</label>
+            <button type="button" class="btn btn-outline-primary" (click)="restartAll()">Restart all</button>
+            <label class="spacer-line">|</label>
+            <button type="button" class="btn btn-outline-primary" (click)="edit()">Edit</button>
+        </div>
+    </div>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
+
+  <div class="card card-body m-3 card-main-content">
+    <div class="show-table">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="text-center server-name-th" scope="col">Connector name</th>
+              <th class="text-center" scope="col">Status</th>
+              <th class="text-center" scope="col">Worker Id</th>
+              <th class="text-center" scope="col">Type</th>
+              <th class="text-center" scope="col">Trace</th>
+              <th class="text-center" scope="col">Create at</th>
+              <th class="text-center" scope="col">Update at</th>
+              <th class="text-center" scope="col">Created User</th>
+              <th class="text-center" scope="col">Updated User</th>
+              <th class="text-center" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doc of connectors" (dblclick)="dbclickToEdit(doc)">
+              <td class="text-center checkbox-item" (click)="selectItem($event, doc.id)">
+                <input [checked]="doc.checked" type="checkbox" />
+              </td>
+              <td class="connector-name">
+                <div class="name-info">
+                    <span class="ellipsis-name">{{ doc.status.name }}</span>
+                    <i class="bi bi-info-circle" (click)="open(doc.info, doc.status, content)"></i>
+                  </div>
+              </td>
+              <td class="col-state text-center"><span [innerHTML]="doc.status.connector | connectorStatus"></span></td>
+              <td class="worker-id">{{ doc.status.connector.worker_id }}</td>
+              <td class="type text-center">{{ doc.connectorClass }}</td>
+              <td class="col-state text-center">
+                <div class="trace-content" [innerHTML]="doc.status.tasks | connectorTaskStatus"
+                     [ngbPopover]="popContent" [popoverTitle]="popTitle" container="body"
+                      popoverClass="my-popoverClass" [autoClose]="'outside'"
+                ></div>
+                <ng-template #popContent>
+                  <div class="table-responsive">
+                    <table class="table">
+                      <ng-container *ngFor="let task of doc.status.tasks">
+                        <tr>
+                          <th>Id</th>
+                          <td>{{task.id}}</td>
+                        </tr>
+                        <tr>
+                          <th>State</th>
+                          <td>{{task.state}}</td>
+                        </tr>
+                        <tr>
+                          <th>Worker</th>
+                          <td>{{task.worker_id}}</td>
+                        </tr>
+                        <tr>
+                          <th>Trace</th>
+                          <td>{{task.trace}}</td>
+                        </tr>
+                      </ng-container>
+                    </table>
+                  </div>
+                </ng-template>
+                <ng-template #popTitle>Tasks status</ng-template>
+              </td>
+              <td class="col-date">{{doc.createAt | date: 'yyyy.MM.dd / HH:mm'}}</td>
+              <td class="col-date">{{doc.updateAt | date: 'yyyy.MM.dd / HH:mm'}}</td>
+              <td class="col-date text-center">{{ doc.createdUser }}</td>
+              <td class="col-date text-center">{{ doc.updatedUser }}</td>
+              <td class="action text-center">
+                <span class="btn-link-action" (click)="restart(doc.id, doc.status.connector.state, doc.status.tasks)">Restart</span>
+                |
+                <span class="btn-link-action" (click)="stopOrResume(doc.id, doc.status.connector.state)">{{ doc.status.connector.state === 'PAUSED' ? 'Resume' : 'Stop'}}</span>
+                |
+                <span class="btn-link-action" (click)="delete(doc.id)">Delete</span>
+                <span *ngIf="hasResetSchema(doc)">
+                  |
+                  <span class="btn-link-action" (click)="onResetSchema(doc)">Reset Schema</span>
+                </span>
+                |
+                <span class="btn-link-action" (click)="viewHistory(doc)">History</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="no-data" *ngIf="!connectors || !connectors.length">No data</div>
+        <app-pavigation [totalPage]="totalPage" (onChangePage)="handleChangePage($event)"
+                        (onChangePageSize)="handleChangePageSize($event)"></app-pavigation>
+
+    </div>
+  </div>
+</div>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Connector Information</h4>
+      <button type="button" class="close" aria-label="Close" (click)="onCloseViewInfo()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link {{active==='1' ? 'active' : ''}}" id="home-tab" data-toggle="tab"
+              role="tab" aria-controls="home" aria-selected="true" (click)="onNavChange($event)">Default</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link {{active==='2' ? 'active' : ''}}" (click)="active='2'" id="profile-tab" data-toggle="tab"
+              role="tab" aria-controls="profile" aria-selected="false">JSON</a>
+          </li>
+        </ul>
+        <div class="tab-content p-2" id="myTabContent">
+          <div class="tab-pane fade show {{active==='1' ? 'active' : ''}}" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="table-config-detail">
+              <label class="h5 mt-4">Config</label>
+              <table class="table table-bordered" *ngIf="keysConfig">
+                <tr *ngFor="let item of keysConfig">
+                  <th>{{item}}</th>
+                  <td>{{transfromData(item)}}</td>
+                </tr>
+              </table>
+
+              <label class="h5 mt-4">Tasks</label>
+              <table class="table table-hover table-bordered mb-4 task-table">
+                <thead>
+                  <tr>
+                    <th class="text-center server-name-th" scope="col">Task ID</th>
+                    <th class="text-center" scope="col">Status</th>
+                    <th class="text-center" scope="col">Worker Id</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of connectorTasks">
+                      <td class="text-center">{{item.id}}</td>
+                      <td class="text-center">
+                        <span [class.status-fail]="item.state == 'FAILED'">{{item.state}}</span>
+                      </td>
+                      <td class="text-center">{{item.worker_id}}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade show {{active==='2' ? 'active' : ''}}" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div style="word-break: break-all;" class="mt-4"><pre id="connector-info-id"></pre></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>

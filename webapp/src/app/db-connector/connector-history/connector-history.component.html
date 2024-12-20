@@ -1,0 +1,52 @@
+<div class="modal-header">
+  <h4 class="modal-title">Config history</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('cancel')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-xl-12" *ngIf="list.length">
+        <div class="d-flex justify-content-end mt-2 mb-2">
+          <button class="btn btn-light" (click)="delete()">Delete</button>
+          <button class="btn btn-light ml-5" (click)="activeModal.close('Close click')">Cancel</button>
+        </div>
+      </div>
+      <div class="col-xl-12 mt-2">
+        <ng-container *ngIf="!list.length">
+          <div class="pt-5 pb-3 text-center"><strong>Config history is empty</strong></div>
+        </ng-container>
+        <ng-container *ngIf="list.length">
+          <table class="table table-sm table-bordered">
+            <thead>
+            <tr>
+              <th class="text-center check-col">
+                <input class="form-check-input" type="checkbox" [checked]="getCheckAllItem()" (click)="selectAllItems($event)"/>
+              </th>
+              <th>Updated at</th>
+              <th class="action-col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let row of list">
+              <tr>
+                <td class="text-center check-col">
+                  <input class="form-check-input" type="checkbox" [checked]="row.checked" (click)="selectItem($event, row)"/>
+                </td>
+                <td>{{row.updateAt  | date: 'yyyy.MM.dd / HH:mm'}}</td>
+                <td class="text-center">
+                  <button class="btn btn-link" (click)="openConfg(row)">view</button>
+                  <button class="btn btn-link" (click)="revert(row.id, connector.id)">revert</button>
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

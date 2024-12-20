@@ -1,0 +1,17 @@
+<!-- <div>
+  <table>
+      <th></th>
+      <th></th>
+      <tbody>
+        <tr *ngFor="let msg of messages;let i=index">
+          <td class="number text-center"><span class="number-text">{{i+1}}</span></td>
+          <td><div class="line">{{msg}}</div></td>
+        </tr>
+      </tbody>
+  </table>
+</div> -->
+
+<div class="main" *ngFor="let msg of messages;let i=index">
+  <div class="number text-center"><span class="number-text">{{i+1}}</span></div>
+  <div class="line" (click)="copy(msg)">{{msg}}</div>
+</div>

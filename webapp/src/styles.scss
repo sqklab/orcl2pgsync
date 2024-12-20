@@ -1,0 +1,420 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$dbsynchronize-client-primary: mat-palette($mat-indigo);
+$dbsynchronize-client-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$dbsynchronize-client-warn: mat-palette($mat-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$dbsynchronize-client-theme: mat-light-theme((
+  color: (
+    primary: $dbsynchronize-client-primary,
+    accent: $dbsynchronize-client-accent,
+    warn: $dbsynchronize-client-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($dbsynchronize-client-theme);
+.mat-option{
+  height: 35px !important;
+}
+
+.mat-select-panel {
+  border-radius: 0 !important;
+  .mat-option{
+    line-height: 2em !important;
+    height: 2.5em !important;
+    padding: 0 8px !important;
+  }
+}
+
+* {
+  font-family: "Noto Sans", "sans-serif";
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-size: 0.8rem;
+}
+
+body {
+  margin: 0;
+  color: #546274;
+  background-color: #fff !important;
+  table {
+    thead{
+      background-color: #efefef;
+    }
+    tr {
+      th,
+      td {
+        font-family: "Noto Sans", sans-serif;
+        div {
+          font-family: "Noto Sans", sans-serif;
+        }
+      }
+    }
+  }
+  input {
+    font-family: "Noto Sans", sans-serif;
+  }
+}
+
+fieldset, legend {
+  all: revert !important;
+}
+
+fieldset {
+  border-color: #f8f9fa !important;
+}
+
+.form-group {
+  margin-bottom: 15px;
+
+  label {
+    margin-bottom: 3px;
+  }
+}
+
+.colum-id {
+  .dropdown-menu {
+    z-index: 10 !important;
+    max-height: 450px;
+    overflow-y: auto;
+    top: 35px;
+  }
+}
+
+.status {
+  font-size: 0.8rem;
+  padding: 3px;
+  border-radius: 2px;
+}
+.control-label.required:after {
+  content:" *";
+  color:red;
+}
+
+a {
+  color: #343a40 !important;
+}
+
+// colors
+$btn-outline-primary-color: #343a40;
+$primary: #343a40;
+$success: #2eb85c;
+
+$border-radius: 2px;
+$form-check-label-color: #343a40;
+
+.mr-5 {
+  margin-right: 5px;
+}
+.ml-5 {
+  margin-left: 5px;
+}
+
+.page-item.active .page-link {
+  color: white !important;
+  background-color: #343a40;
+}
+
+.page-link {
+  cursor: pointer;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+}
+
+table {
+  th, td {
+    vertical-align: middle;
+  }
+  td .tooltip {
+    position: absolute;
+  }
+}
+.required::after {
+  content: " *";
+  color: #dc3545;
+}
+.sr-only {
+  display: none;
+}
+
+.bg-header{
+  background: #efefef;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.modal-title{
+  font-size: 1.25rem;
+}
+
+.footer {
+  position: fixed;
+  z-index: 100;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: #efefef;
+}
+
+ngb-datepicker, ngb-typeahead-window, ngb-modal-window{
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+}
+
+.multiselect-dropdown .dropdown-btn .selected-item-container .selected-item {
+  max-width: fit-content !important;
+}
+
+.multiselect-dropdown .dropdown-btn .selected-item-container .selected-item a {
+  color: white !important;
+}
+
+.multiselect-dropdown .dropdown-btn {
+  font-size: 0.9rem;
+}
+
+.multiselect-dropdown .dropdown-btn .dropdown-multiselect__caret:before {
+  border-width: 5px 5px 0 !important;
+  top: 60% !important;
+}
+
+.bi.bi-x {
+  cursor: pointer;
+  color: #787878;
+}
+.apexcharts-legend {
+  gap: 0 200px !important;
+}
+
+.apexcharts-legend-series {
+  width: 400px !important;
+}
+
+.multiselect-dropdown .dropdown-btn {
+  border-color: #ced4da !important;
+  border-radius: 2px !important;
+}
+
+.badge-secondary{
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  color: #fff;
+  background-color: #6c757d;
+}
+
+.spacer-line {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.ngb-dp-day.ngb-dp-today{
+  background-color: #d8dbe0;
+}
+.ngb-dp-today:hover {
+  background-color: #d8dbe0 !important;
+}
+
+.ngb-tp-input-container.ngb-tp-hour, .ngb-tp-input-container.ngb-tp-minute {
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px !important;
+    font-size: 12px;
+  }
+}
+
+.selected-item-container {
+  padding: 2px !important;
+}
+
+ng-multiselect-dropdown .dropdown-list .filter-textbox{
+  padding: 5px !important;
+  input{
+    padding: 0 0 0 5px !important;
+  }
+}
+.multiselect-item-checkbox input[type=checkbox] + div:after {
+  left: 3px !important;
+  margin-top: -5px !important;
+}
+
+.multiselect-item-checkbox input + div:before {
+  border: 1px solid #1c2437 !important;
+  color: #1c2437 !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+.multiselect-item-checkbox input[type=checkbox]:checked + div:before{
+  border-color: #337ab7 !important;
+}
+
+.my-popoverClass{
+  max-width: 50% !important;
+  max-height: 50% !important;
+  overflow: auto;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.bi.bi-info-circle{
+  cursor: pointer;
+}
+
+.mat-standard-chip {
+  font-size: 13px !important;
+  border-radius: 2px !important;
+  padding: 1em !important;
+  min-height: 27px !important;
+}
+.mat-option {
+  font-size: 13px !important;
+  line-height: 1em;
+}
+
+.status-fail {
+  @extend .status;
+  @extend .bg-danger;
+  @extend .text-white;
+}
+
+.shadow-md{
+  box-shadow: 0 .25rem .5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.char-container {
+  //position: relative;
+  .apexcharts-toolbar {
+    //top: -35px !important;
+    //right: 5px !important;
+  }
+}
+
+.no-before::before {
+  content: '' !important;
+}
+
+.btn-outline-primary {
+  border-color: #343a40b8 !important;
+}
+
+.mat-chip.mat-standard-chip {
+   background-color: #efefef !important;
+ }
+.form-label {
+  margin-bottom: 0.2rem !important;
+}
+
+.btns, .modal-footer {
+  button {
+    min-width: 70px;
+  }
+}
+
+ngb-timepicker{
+  fieldset{
+    border-color: transparent !important;
+  }
+}
+
+button.btn-addon{
+  margin-left: -33px !important;
+  border-color: #ced4da;
+  background-color: white;
+}
+
+.no-data{
+  text-align: center;
+  font-weight: bold;
+  margin-top: -13px;
+  @extend .alert;
+  @extend .bg-light;
+}
+
+.flex-between-center{
+  @extend .d-flex;
+  @extend .justify-content-between;
+  @extend .align-items-center;
+}
+
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "~jsoneditor/dist/jsoneditor.min.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.jsoneditor.jsoneditor-mode-code,
+.jsoneditor.jsoneditor-mode-tree,
+.jsoneditor.jsoneditor-mode-text,
+.jsoneditor.jsoneditor-mode-view {
+  height:  calc(100vh - 400px);
+  min-height: 500px;
+}
+// fix bug wrong cursor in mode = code
+// https://github.com/josdejong/jsoneditor/issues/502
+.ace_editor * {
+  font-family: "dejavu sans mono", "droid sans mono", consolas, monaco, "lucida console", "courier new", courier, monospace, sans-serif;
+}
+.jsoneditor-poweredBy{
+  display: none;
+}
+.jsoneditor-menu{
+  background-color: #969696;
+  border-bottom: 1px solid #969696;
+}
+.jsoneditor{
+  border: thin solid #00000029;
+}
+
+.jsoneditor-contextmenu .jsoneditor-menu li button.jsoneditor-selected, .jsoneditor-contextmenu .jsoneditor-menu li button.jsoneditor-selected:focus, .jsoneditor-contextmenu .jsoneditor-menu li button.jsoneditor-selected:hover {
+  background-color: #444444;
+}
+
+.btn-light {
+  background-color: #efefef;
+  border-color: #efefef;
+}
+.connector-history{
+  z-index: 1050 !important;
+}

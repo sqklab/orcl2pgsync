@@ -1,0 +1,6 @@
+<app-layout *ngIf="isAuth;else login">
+    <router-outlet></router-outlet>
+</app-layout>
+<ng-template #login>
+    <router-outlet></router-outlet>
+</ng-template>

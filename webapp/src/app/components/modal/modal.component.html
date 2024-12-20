@@ -1,0 +1,24 @@
+<button id="openModal" class="d-none" data-bs-toggle="modal" data-bs-target="#modal"></button>
+
+<div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 14px;" class="modal-title" id="modalLabel">{{title}}</p>
+            </div>
+            <div class="modal-body">
+                <div class="px-3 py-4 text-center {{type}}" style="font-size: 18px;">{{message}}</div>
+                <div *ngIf="isShowCheckBox" class="px-3 py-4 text-center">
+                    <span>{{titleOfCheckBox}}</span>
+                    <input type="checkbox" style="margin-left: 10px;" (change)="handleCheckedDeleteKafkaConnector($event)"/>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button style="width: 100px;" type="button" class="btn btn-outline-primary" (click)="handleConfirm()" data-bs-dismiss="modal">OK</button>
+                <button style="width: 100px;" *ngIf="cancel" type="button" (click)="handleCloseModal()" class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

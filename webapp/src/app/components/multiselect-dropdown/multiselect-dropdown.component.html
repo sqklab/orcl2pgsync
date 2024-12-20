@@ -1,0 +1,25 @@
+<div class="multiselect-dropdown">
+  <div [style.width.px]="width" *ngIf="width > 0">
+    <ng-multiselect-dropdown
+      [settings]="dropdownSettings"
+      [disabled]="disabled"
+      [data]="dropdownList"
+      [(ngModel)]="selectedItems"
+      (onSelect)="onItemSelect($event)"
+      (onDeSelect)="removeSelected($event)"
+    >
+    </ng-multiselect-dropdown>
+  </div>
+  <div style="width: 100%;" *ngIf="width < 0">
+    <ng-multiselect-dropdown
+      [settings]="dropdownSettings"
+      [disabled]="disabled"
+      [data]="dropdownList"
+      [(ngModel)]="selectedItems"
+      (onSelect)="onItemSelect($event)"
+      (onDeSelect)="removeSelected($event)"
+    >
+    </ng-multiselect-dropdown>
+  </div>
+  <i *ngIf="selectedItems && selectedItems.length" class="bi bi-x clearSelection" (click)="clearSelection()"></i>
+</div>

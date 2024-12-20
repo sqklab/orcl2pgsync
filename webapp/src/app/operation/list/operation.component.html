@@ -1,0 +1,267 @@
+<nav aria-label="breadcrumb" class="border-bottom shadow-sm bg-white p-3">
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Operation</li>
+  </ol>
+</nav>
+
+<div class="m-3">
+  <ul class="nav nav-tabs bg-white p-3 pb-0" id="myTab" role="tablist">
+    <li class="nav-item cursor-pointer" role="presentation">
+      <a class="nav-link {{ active === '1' ? 'active' : '' }}" id="home-tab" data-toggle="tab" role="tab"
+         aria-controls="home" aria-selected="true" (click)="active = '1'">Operation</a>
+    </li>
+    <li class="nav-item cursor-pointer" role="presentation">
+      <a class="nav-link {{ active === '2' ? 'active' : '' }}" (click)="active = '2'" id="profile-tab"
+         data-toggle="tab" role="tab" aria-controls="profile" aria-selected="false">Redo Log</a>
+    </li>
+    <li class="nav-item cursor-pointer" role="presentation">
+      <a class="nav-link {{ active === '3' ? 'active' : '' }}" (click)="active = '3'" id="profile-tab"
+         data-toggle="tab" role="tab" aria-controls="profile" aria-selected="false">Publication</a>
+    </li>
+  </ul>
+
+  <div class="tab-content border-top-0" id="myTabContent">
+    <div class="tab-pane fade show {{active==='1' ? 'active' : ''}}" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div>
+        <div class="card card-body border-top-0">
+          <div class="card card-body pb-3">
+            <div class="row d-flex justify-content-center">
+              <div class="col-sm-8">
+                <div class="row g-3 mb-3">
+                  <div class="col-6">
+                    <label class="form-label">Oracle DB Name</label>
+                    <app-auto-complete
+                      [disabled]="isSearching"
+                      [invalidInput]="invalidOracleDB"
+                      [items]="sourceOracleDBs"
+                      [chooseItem]="operationDto.sourceDatabase"
+                      (clearSelected)="onClearOracleDB()"
+                      (selectedItem)="operationDto.sourceDatabase = $event; buildQueryOracle(); buildQueryPostgres()"
+                    >
+                    </app-auto-complete>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label">Oracle Schema</label>
+                    <app-auto-complete
+                      [disabled]="isSearching"
+                      [invalidInput]="invalidOracleSchema"
+                      [items]="oracleSchemas"
+                      [chooseItem]="operationDto.sourceSchema"
+                      (clearSelected)="onClearOracleSchema()"
+                      (selectedItem)="operationDto.sourceSchema = $event; buildQueryOracle(); buildQueryPostgres()"
+                    >
+                    </app-auto-complete>
+                  </div>
+                </div>
+                <div class="row g-3 mb-3">
+                  <div class="col">
+                    <label class="form-label">Postgres DB Name</label>
+                    <app-auto-complete
+                      [disabled]="isSearching"
+                      [invalidInput]="invalidPostgresDB"
+                      [items]="postgresDBs"
+                      [chooseItem]="operationDto.targetDatabase"
+                      (clearSelected)="onClearPostgresDB()"
+                      (selectedItem)="operationDto.targetDatabase = $event; buildQueryOracle(); buildQueryPostgres()"
+                    >
+                    </app-auto-complete>
+                  </div>
+                  <div class="col">
+                    <label class="form-label">Postgres Schema</label>
+                    <app-auto-complete
+                      [disabled]="isSearching"
+                      [invalidInput]="invalidPostgresSchema"
+                      [items]="postgresSchemas"
+                      [chooseItem]="operationDto.targetSchema"
+                      (clearSelected)="onClearPostgresSchema()"
+                      (selectedItem)="operationDto.targetSchema = $event; buildQueryOracle(); buildQueryPostgres()"
+                    >
+                    </app-auto-complete>
+                  </div>
+                </div>
+                <div class="row g-3 mb-3">
+                  <div class="col">
+                    <label class="form-label">Table</label>
+                    <app-auto-complete
+                      [disabled]="isSearching"
+                      [invalidInput]="invalidTable"
+                      [items]="tableNames"
+                      [chooseItem]="operationDto.table"
+                      (clearSelected)="operationDto.table=''"
+                      (selectedItem)="selectTable($event)"
+                    >
+                    </app-auto-complete>
+                  </div>
+                  <div class="col">
+                    <label class="form-label">{{operationDto.table === 'XCION_SBC_TBL_UNITED' ? 'PVS_SBC_CONT_NO' : 'SA_ID'}}</label>
+                    <app-column-id-auto-complete (oracleValueIdNotFound)="invalidOracleIdValue=$event"
+                                                 [disabled]="isSearching"
+                                                 (outSelectedItem)="buildQueryOracle(); buildQueryPostgres()"
+                                                 [operationInfo]="operationDto" #appColumnIdAutoComplete>
+                    </app-column-id-auto-complete>
+                  </div>
+                </div>
+                <div class="row g-3 mb-3">
+                  <div class="col-12">
+                    <label class="form-label">Where</label>
+                    <input type="text" class="form-control" [disabled]="isSearching" [(ngModel)]="operationDto.whereStmFillData"
+                           (blur)="buildQueryOracle(); buildQueryPostgres()"
+                           (keyup)="buildQueryOracle(); buildQueryPostgres()">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Oracle SQL</label>
+                    <div>
+                      <textarea type="text" rows="2" class="form-control" disabled [(ngModel)]="operationDto.sourceSql"></textarea>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Postgres SQL</label>
+                    <textarea type="text" rows="2" class="form-control" disabled [(ngModel)]="operationDto.targetSql"></textarea>
+                  </div>
+                </div>
+                <div class="search">
+                  <button type="button" class="btn btn-primary" (click)="onSearch()" [disabled]="isSearching">
+                    <span [class.fa-spinner]="isSearching" class="fa fa-spin mr-2"></span> Search
+                  </button>
+
+                  <button type="button" class="btn btn-outline-primary" (click)="cancelSearching()" [style.visibility]="isSearching ? 'visible' : 'hidden'">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-info m-3" role="alert" *ngIf="isSearching">
+          {{notiMsgRunning}}
+        </div>
+        <div class="card card-body mt-3" *ngIf="operationResponsePaged && operationResponsePaged.length > 0">
+          <div class="display-result">
+            <div class="status-result mb-1">
+              <div class="operation-action">
+                <div class="op-info">
+                  <span class="bg-warning text-white p-1" *ngIf="!isSame">Different</span>
+                  <span>Total: {{totalOperation}}</span>
+                  <span>Insert: {{operationI}}</span>
+                  <span>Update: {{operationU}}</span>
+                  <span>Delete: {{operationD}}</span>
+                </div>
+                <div>
+                  <button type="button" class="btn btn-outline-primary mr-3" (click)="onCorrection(true)" [disabled]="isCorrecting">Correction</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="correctionMsg">
+              {{correctionMsg}}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="correctionMsg = null">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="show-table mt-1" *ngIf="operationResponsePaged && operationResponsePaged.length > 0">
+              <div class="showtable-scroll mb-4">
+                <table class="table table-hover table-bordered mt-3">
+                  <thead>
+                  <th class="text-center"><input type="checkbox" [checked]="checkAll" (change)="handleCheckAll()"/></th>
+                  <th></th>
+                  <th></th>
+                  <th class="text-center" scope="col" *ngFor="let h of headers">{{h}}</th>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let doc of operationResponsePaged">
+                    <td class="text-center" style="width: 50px;"><input type="checkbox" [checked]="doc.selected" (change)="doc.selected=!doc.selected"/></td>
+                    <td (click)="showDetailRecord(doc)"><i class="bi bi-arrows-angle-expand"></i></td>
+                    <td>
+                      <span *ngIf="doc.operation==='DELETE'" class="status bg-danger text-white">{{doc.operation}}</span>
+                      <span *ngIf="doc.operation==='INSERT'" class="status bg-success text-white">{{doc.operation}}</span>
+                      <span *ngIf="doc.operation==='UPDATE'" class="status bg-warning text-white">{{doc.operation}}</span>
+                    </td>
+                    <td *ngFor="let row of toArrayValueOfColumn(doc)" [class.error-row]="checkStatusRow(doc)" (click)="onShowDetailError(doc, viewDetaiError)">{{row}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <app-pavigation
+                [totalPage]="totalPage"
+                [currentPage]="currentPage"
+                (onChangePage)="handleChangePage($event)"
+                (onChangePageSize)="handleChangePageSize($event)"
+              ></app-pavigation>
+            </div>
+            <div class="mb-4 alert alert-secondary" *ngIf="showNoDiff && !isSearching">
+              No Different Data
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade show {{active==='2' ? 'active' : ''}}" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+      <app-redo-log></app-redo-log>
+    </div>
+
+    <div class="tab-pane fade show {{active==='3' ? 'active' : ''}}" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+      <app-publication-manager></app-publication-manager>
+    </div>
+  </div>
+</div>
+
+<ng-template #viewDetaiError let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Correction error</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="onCloseModal()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="info-text-body">
+      {{operationError.errorMessage}}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="onCloseModal()"
+    >
+      Cancel
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #dialogDelete let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="onCloseModal()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="info-text-body">
+      The data were compared at {{operationSummary.operationDate | date: 'yyyy.MM.dd / HH:mm'}}. Would you like to see it or compare again?
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="reSearch()">
+      Search again
+    </button>
+    <button type="button" class="btn btn-outline-primary" (click)="loadSearchData();onCloseModal()">
+      View data
+    </button>
+    <button type="button" class="btn btn-outline-primary" (click)="onCloseModal()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

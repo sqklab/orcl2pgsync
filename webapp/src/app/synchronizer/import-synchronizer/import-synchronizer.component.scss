@@ -1,0 +1,91 @@
+.card-main-content {
+  min-height: calc(100vh - 265px);
+}
+.header {
+    text-align: center;
+}
+
+.header h1 {
+    font-family: serif;
+    font-size: 38px;
+    font-family: 'Times New Roman';
+}
+
+.content {
+    margin: 100px;
+}
+
+.margin25 {
+    margin: 25px;
+}
+
+.upload {
+    cursor: pointer;
+}
+
+.progress {
+    border-radius: 1.25rem;
+    border: 1px solid;
+    margin-bottom: 10px;
+}
+
+.text-header {
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+
+.progress-bar {
+    color: green;
+}
+
+.btns {
+    margin-top: 20px;
+    .btn-import {
+        margin-right: 10px;
+    }
+}
+
+input[type='radio'] {
+    cursor: pointer;
+}
+.form-group {
+    label {
+        cursor: pointer;
+    }
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    span {
+        cursor: pointer;
+    }
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 220px;
+    min-height: 100%;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.radio-area {
+    input[type='radio'] {
+        margin-right: 5px;
+    }
+    label {
+        margin-right: 10px;
+    }
+}
+.file-name {
+    margin-left: 10px;
+    font-size: 14px;
+}

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  kafka-service:
+    build: ./Docker/connector
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+      - "8083:8083"
+      - "8084:8084"
+    volumes:
+      - .docker/kafka-data:/var/lib/kafka/data
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.1.59
+  localstack:
+    image: localstack/localstack:latest
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - EDGE_PORT=4566
+      - SERVICES=lambda,s3
+    ports:
+      - '4566-4583:4566-4583'
+    volumes:
+      - "${TEMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+  da-postgres:
+    container_name: dbsync-postgres
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=dbsync
+    command: [ "postgres", "-c", "wal_level=logical" ]
+    volumes:
+      - ./Docker/scripts:/docker-entrypoint-initdb.d
+      - .docker/pgdata:/var/lib/postgresql/data
+  kafka-ui:
+    image: provectuslabs/kafka-ui:v0.4.0
+    container_name: kafka-ui
+    ports:
+      - "7070:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=localhost
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-service:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=kafka-service:2181
+    depends_on:
+      - kafka-service

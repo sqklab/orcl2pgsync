@@ -1,0 +1,75 @@
+<div class="card card-body mx-3 mb-3 mt-0 border-top-0 pt-0">
+  <div class="card card-body">
+    <app-header-search (filter)="handleFilter($event)"
+                       [modeActiveTab]="'1'"
+                       [targetDB]="targetDB"
+                       [targetSchema]="targetSchema"
+                       [tables]="tables"
+    ></app-header-search>
+  </div>
+</div>
+<div class="card card-body m-3 card-main-content">
+  <div class="card card-body mb-3" style="flex-grow: initial" *ngIf="scheduledTimes && scheduledTimes.length">
+  <ul class="nav nav-pills" id="pills-tab" role="tablist" >
+    <li class="nav-item" role="presentation" *ngFor="let dateTime of scheduledTimes;let i=index">
+      <button class="nav-link {{dateTime.active ? 'active' : ''}}" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+        type="button" role="tab" aria-controls="pills-home" aria-selected="true" (click)="getViewResultByDateAndTime(dateTime)">
+        {{dateTime.compareDate}} / {{dateTime.compareTime}}
+        <i class="bi bi-x" (click)="deleteViewResultByDateAndTime(dateTime.compareDate, dateTime.compareTime)"></i>
+      </button>
+      <span class="spacer-line" *ngIf="i < (scheduledTimes.length -1)"> | </span>
+    </li>
+  </ul>
+  </div>
+<div class="infomation">
+  <div class="info-text" >
+    Total: <span >{{totalComparison}}</span>
+    Success: <span  class="text-success">{{summary.equal}}</span>
+    Failed: <span  class="text-danger">{{summary.fail}}</span>
+  </div>
+  <div>
+    <button type="button" class="btn btn-outline-primary" (click)="reload()">Reload</button>
+    <label class="spacer-line">|</label>
+    <button type="button" class="btn btn-outline-primary" (click)="deleteSelectedItems()">Delete Selected item</button>
+    <label class="spacer-line">|</label>
+    <button type="button" class="btn btn-outline-primary" (click)="export()" >Export</button>
+    <label class="spacer-line">|</label>
+    <button type="button" class="btn btn-outline-primary" (click)="viewLog()">View Log</button>
+  </div>
+</div>
+
+<div class="show-table">
+  <table class="table table-hover table-bordered mt-4">
+    <thead>
+      <tr>
+        <th class="text-center" scope="col"><input class="" type="checkbox" [checked]="getCheckAllItem()" id="checkboxNoLabel" (click)="selectItemAllItems($event)" /></th>
+        <th class="text-center" scope="col">PL SQL</th>
+        <th class="text-center" scope="col">DB</th>
+        <th class="text-center" scope="col">Status</th>
+        <th class="text-center" scope="col">Start time</th>
+        <th class="text-center" scope="col">End time</th>
+        <th class="text-center" scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doc of registedSchedule" style="height: 51px;">
+        <td class="text-center">
+          <input class="" type="checkbox" id="checkboxNoLabel" [checked]="doc.checked" (click)="selectItem($event, doc)"/>
+        </td>
+        <td >{{ doc.plSQL }}</td>
+        <td >{{ doc.db }}</td>
+        <td class="text-center">
+            <span *ngIf="doc.status" class="filter-status bg-success text-white">SUCCESS</span>
+            <span *ngIf="!doc.status" class="filter-status bg-danger text-white" ngbTooltip={{doc.errorMsg}}>FAILED</span>
+        </td>
+        <td class="text-center">{{doc.startAt | date: 'yyyy.MM.dd HH:mm'}}</td>
+        <td class="text-center">{{doc.endAt | date: 'yyyy.MM.dd HH:mm'}}</td>
+        <td class="text-center"><button type="button" class="btn btn-outline-primary" (click)="onRetry(doc)">Retry</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="no-data" *ngIf="totalPage===0">No data</div>
+  <app-pavigation [totalPage]="totalPage" [currentPage]="currentPage" (onChangePage)="handleChangePage($event)"
+                  (onChangePageSize)="handleChangePageSize($event)"></app-pavigation>
+</div>
+</div>

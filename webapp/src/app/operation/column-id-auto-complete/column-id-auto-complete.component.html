@@ -1,0 +1,18 @@
+  <div class="colum-id row">
+    <div class="col">
+        <input id="typeahead-column-id" type="text" class="form-control"
+          [class.is-invalid]="searchFailed" [(ngModel)]="operationInfo.columnIdValue"
+          [disabled]="disabled"
+          (blur)="onChangeValue($event.target.value)"
+          (keyup)="onChangeValue($event.target.value)"
+          (keydown.enter)="onShowSuggestion($event)"
+          (selectItem)="onSelectedItem($event)" #SearchInput/>
+      <i class="bi bi-search" (click)="onShowSuggestion($event)"></i>
+      <small *ngIf="searching" class="form-text text-muted">searching...</small>
+      <div class="invalid-feedback" *ngIf="errorMsg">{{errorMsg}}</div>
+      <div class="dropdown-menu" id="dropdown-menu-id" *ngIf="toggleMenu && suggestValues.length > 0" [class.show]="toggleMenu && suggestValues.length > 0">
+        <div *ngIf="isFetchHint" class="menu-hint form-text text-muted">Choose the first character to find data</div>
+        <button type="button" class="dropdown-item" *ngFor="let item of suggestValues" (click)="onSelectedValue(item)">{{item}}</button>
+      </div>
+    </div>
+  </div>

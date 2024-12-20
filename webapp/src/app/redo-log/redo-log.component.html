@@ -1,0 +1,226 @@
+<diV class="card card-body border-top-0 border-bottom-0">
+  <div class="card card-body">
+    <div class="row">
+      <div class="col">
+        <strong>Current SCN</strong>
+        <div class="search-source-db mb-3 mt-2">
+          <app-auto-complete [items]="sourceDBs" [width]="250"
+                             [chooseItem]="selectedSourceDB"
+                             (clearSelected)="this.selectedSourceDB = ''"
+                             (selectedItem)="selectedSourceDB=$event">
+          </app-auto-complete>
+          <button type="button" (click)="getCurrentSCN()" class="btn btn-outline-primary">Find</button>
+        </div>
+        <div class="search-source-db-result" *ngIf="currentScnInfo">
+          <div class="row mb-2">
+            <div class="col">
+              <label>Current SCN:</label>
+              <strong class="ml-4">{{currentScnInfo.scn}}</strong>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label>Find Time:</label>
+              <span class="ml-4">{{currentScnInfo.findTime | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <strong>Time to SCN</strong>
+        <div class="search-source-db mb-3 mt-2">
+          <span>Time</span>
+          <form class="form-inline">
+            <div class="form-group mb-0">
+              <div class="input-group" style="width: 135px;">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" (dateSelect)="loadResultByDate($event)" ngbDatepicker #d1="ngbDatepicker"
+                       aria-describedby="date-btn-addon">
+                <button class="btn btn-outline-secondary btn-addon" id="date-btn-addon" (click)="d1.toggle()" type="button"><span class="fa fa-calendar"></span></button>
+              </div>
+            </div>
+          </form>
+          <ngb-timepicker [(ngModel)]="timeHHMMSS" [seconds]="true" [spinners]="false"></ngb-timepicker>
+
+          <button type="button" (click)="getScnByTimestamp()" class="btn btn-outline-primary">Find</button>
+        </div>
+        <div class="search-source-db-result" *ngIf="scnToTime_Time">
+          <div class="row">
+            <div class="col">
+              <label>SCN:</label>
+              <strong class="ml-4">{{scnToTime_Time}}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="container">
+          <div class="row">
+            <div class="col"></div>
+            <div class="col">
+              <strong>SCN to Time</strong>
+              <div class="search-source-db mb-3 mt-2">
+                <span>SCN</span>
+                <input type="text" class="form-control" style="width: 250px" [(ngModel)]="scnToTime"/>
+                <button type="button" (click)="getTimestampByScn()" class="btn btn-outline-primary">Find</button>
+              </div>
+              <div class="search-source-db-result" *ngIf="timeToSCN_SCN">
+                <div class="row">
+                  <div class="col">
+                    <label>Time:</label>
+                    <span class="ml-4">{{timeToSCN_SCN}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</diV>
+
+<div class="card card-body border-top-0 pt-0">
+  <div class="card card-body">
+    <div class="row">
+      <div class="col">
+        <div class="scn mb-2">
+          <label>Start SCN</label>
+          <input type="text" [(ngModel)]="logmrnContent.startScn" class="form-control"/>
+        </div>
+        <div class="scn">
+          <label>End SCN</label>
+          <input type="text" [(ngModel)]="logmrnContent.endScn" class="form-control"/>
+        </div>
+      </div>
+      <div class="col operation-type">
+        <label>Operation Type</label>
+        <div class="checkboxs">
+          <div><input type="checkbox" value="1" (change)="onChangeOperation($event)" id="insert"/> <label for="insert">Insert</label></div>
+          <div><input type="checkbox" value="3" (change)="onChangeOperation($event)" id="Update"/> <label for="Update">Update</label></div>
+          <div><input type="checkbox" value="2" (change)="onChangeOperation($event)" id="Delete"/> <label for="Delete">Delete</label></div>
+          <div><input type="checkbox" value="5" (change)="onChangeOperation($event)" id="DDL"/> <label for="DDL">DDL</label></div>
+        </div>
+      </div>
+      <div class="col searchtable-eare">
+        <div>
+          <div class="search-source-db">
+            <span style="min-width: 50px;">DB</span>
+            <app-auto-complete [items]="sourceDBsForLogMnrContents" [width]="150"
+                               [chooseItem]="logmrnContent.db"
+                               (clearSelected)="this.logmrnContent.db = ''"
+                               (onBlueSelectedItem)="logmrnContent.db=$event;onGetTablesByDbAndSchema()">
+            </app-auto-complete>
+          </div>
+          <div class="search-source-db mb-3 mt-2">
+            <span>Schema</span>
+            <app-auto-complete [items]="sourceSchemas" [width]="150"
+                               [chooseItem]="logmrnContent.schema"
+                               (clearSelected)="this.logmrnContent.schema = ''"
+                               (onBlueSelectedItem)="logmrnContent.schema=$event;onGetTablesByDbAndSchema()">
+            </app-auto-complete>
+          </div>
+        </div>
+      </div>
+      <div class="col table-result">
+        <div>Table</div>
+        <div>
+          <div class="check-all"><input type="checkbox" id="checkall" (change)="onCheckAllTables($event)"/> <label for="checkall">Check All</label></div>
+          <div class="selected-tables" *ngIf="allTables.length > 0">
+            <div class="group-tables" *ngFor="let table of allTables">
+              <input type="checkbox" id="{{table.name}}" [(ngModel)]="table.checked"> <label for="{{table.name}}">{{table.name}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <button style="float: right;" type="button" (click)="searchLogMnrContents()" class="btn btn-outline-primary search-btn">Search</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-body mt-3" *ngIf="logContentsResult">
+  <div class="row">
+    <div class="col">
+      <div class="content">
+        <div class="show-table">
+          <table class="table table-hover table-bordered mt-4">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col">No</th>
+              <th class="text-center" scope="col">SCN</th>
+              <th class="text-center" scope="col">Start SCN</th>
+              <th class="text-center" scope="col">Commit SCN</th>
+              <th class="text-center" scope="col">Timestamp</th>
+              <th class="text-center" scope="col">Operation</th>
+              <th class="text-center" scope="col">Seg Owner</th>
+              <th class="text-center" scope="col">Table Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let doc of logContentsResult.logContents;let i=index" (click)="onShowReUnDoLog(doc)" [class.selected-row]="doc.selected">
+              <td class="text-center">{{i + 1}}</td>
+              <td class="text-center">{{doc.scn}}</td>
+              <td class="text-center">{{doc.startScn}}</td>
+              <td class="text-center">{{doc.commitScn}}</td>
+              <td class="text-center">{{doc.timestamp}}</td>
+              <td class="text-center">{{doc.operation}}</td>
+              <td class="text-center">{{doc.segOwner}}</td>
+              <td class="text-center">{{doc.tableName}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="no-data" *ngIf="logContentsResult.logContents.length===0">No data</div>
+          <app-pavigation [currentPage]="currentPage" [totalPage]="totalPage" (onChangePage)="handleChangePage($event)"
+                          (onChangePageSize)="handleChangePageSize($event)"></app-pavigation>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" *ngIf="detailReUndoLog">
+      <div class="info-text-body">
+        <div class="redo" (click)="copy(detailReUndoLog.sqlRedo)">
+          <div>REDO</div>
+          <div style="padding: 1em;border: 1px solid; min-height: 350px;">{{detailReUndoLog.sqlRedo}}</div>
+        </div>
+        <div class="undo" (click)="copy(detailReUndoLog.sqlRedo)">
+          <div>UNDO</div>
+          <div style="padding: 1em;border: 1px solid; min-height: 350px;">{{detailReUndoLog.sqlUndo}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalDetailReUndoLog let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">REDO, UNDO Infomation</h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="onCloseModal()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="info-text-body">
+        <table class="table table-bordered" *ngIf="detalReUndoLog">
+            <tr>
+              <th>REDO</th>
+              <td (click)="copy(detalReUndoLog.sqlRedo)" style="padding-left: 2em; cursor: pointer;">{{detalReUndoLog.sqlRedo}}</td>
+            </tr>
+            <tr>
+                <th>UNDO</th>
+                <td (click)="copy(detalReUndoLog.sqlUndo)" style="padding-left: 2em; cursor: pointer;">{{detalReUndoLog.sqlUndo}}</td>
+              </tr>
+          </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="onCloseModal()">
+        Cancel
+      </button>
+    </div>
+  </ng-template>

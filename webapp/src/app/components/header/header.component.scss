@@ -1,0 +1,127 @@
+.main-container {
+  margin-top: 41px;
+  height: calc(100vh - 46px);
+  width: 100%;
+  position: relative;
+}
+.navbar{
+  border-bottom: 1px solid #00000026;
+  height: 40px;
+}
+.header-logo {
+  img {
+    height: auto;
+    max-height: 38px;
+  }
+}
+
+.nav-link {
+  color: #1c2437;
+}
+
+.menu {
+  border-right: 1px solid #efefef;
+  width: 200px;
+  height: calc(100vh - 40px);
+  position: fixed;
+  left: 0;
+  top: 40px;
+  a {
+    cursor: pointer;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+  }
+  .menu-hasChildren[aria-expanded="true"] {
+    i.bi-caret-down-fill {
+      transform: rotate(-180deg);
+    }
+  }
+  .activeMenu {
+    background-color: #efefef;
+    color: #1c2437;
+  }
+  .activeHome {
+    background-color: #efefef;
+    a {
+      color: #1c2437;
+    }
+    .colorActive {
+      color: #1c2437 !important;
+    }
+  }
+}
+
+.paddingMenu {
+  padding: 3px 0 !important;
+  li a {
+    padding-right: 20px;
+    padding-left: 25px;
+  }
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 101;
+  opacity: 0.8;
+  transform: translate(-50%, -50%);
+  display: none;
+  color: white !important;
+  &.show {
+    display: block;
+  }
+}
+.modal-backdrop-spinner {
+  position: fixed;
+  z-index: 100;
+}
+.account {
+  cursor: pointer;
+}
+
+.main-body.collapse-main {
+  width: 100%;
+  margin-left: 0;
+}
+
+.main-body {
+  overflow: auto;
+  width: calc(100% - 200px);
+  margin-left: 200px;
+  background-color: #0000000a;
+
+  margin-top: 40px;
+  margin-bottom: 39px;
+  height: calc(100vh - 80px);
+  position: relative;
+  transition: all .1s;
+}
+
+.dropdown-menu {
+  min-width: 6rem;
+}
+
+.group-menu {
+  display: flex;
+  margin-right: 30px;
+  gap: 0 20px;
+}
+
+.lang {
+  margin-right: 22px;
+}
+.kafka-message{
+  font-size: 16px;
+}
+
+.flag {
+  height: 20px;
+  margin-right: 5px;
+}
+.flag.kr{
+  height: 22px;
+}
+
+.dropdown-menu.show {
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+}

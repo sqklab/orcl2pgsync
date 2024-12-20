@@ -1,0 +1,16 @@
+
+.group-search {
+    //display: inline-block;
+    position: relative;
+    .bi-x {
+        position: absolute;
+        right: 5px;
+        top: 6px;
+        cursor: pointer;
+    }
+    #typeahead-focus:hover {
+        .bi-x {
+            display: block;
+        }
+    }
+}

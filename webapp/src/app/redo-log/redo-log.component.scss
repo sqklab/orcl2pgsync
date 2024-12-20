@@ -1,0 +1,92 @@
+.search-source-db {
+    display: flex;
+    align-items: center;
+    gap: 0 20px;
+}
+
+.scn {
+    display: flex;
+    gap: 0 20px;
+    align-items: center;
+    label {
+        min-width: 80px;
+    }
+}
+.operation-type {
+    display: flex;
+    justify-content: center;
+    gap: 0 20px;
+    .checkboxs {
+        display: flex;
+        flex-direction: column;
+        label {
+            margin-left: 10px;
+        }
+    }
+}
+
+.table-result {
+    display: flex;
+    gap: 0 20px;
+}
+
+.ml-4 {
+    margin-left: 10px;
+}
+
+.selected-tables {
+    max-height: 100px;
+    overflow: auto;
+    padding: 1em;
+    border: 1px solid #ced4da;
+}
+
+.group-tables {
+    display: flex;
+    align-items: center;
+    gap: 0 5px;
+}
+
+.redolog {
+    word-break: break-all;
+    margin-bottom: 20px;
+}
+.undolog {
+    word-break: break-all;
+}
+
+.check-all {
+    display: flex;
+    gap: 0 5px;
+    align-items: center;
+}
+
+.searchtable-eare {
+    display: flex;
+    gap: 0 5px;
+    align-items: flex-start;
+}
+
+.redo, .undo {
+    cursor: pointer;
+    word-break: break-all;
+    margin-top: 8px;
+}
+
+.info-text-body {
+    margin-top: 11px;
+    display: flex;
+    flex-direction: column;
+}
+
+.selected-row {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+.search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 49px;
+    margin-right: 11px;
+}

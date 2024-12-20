@@ -1,0 +1,167 @@
+<nav aria-label="breadcrumb" class="border-bottom shadow-sm bg-white p-3">
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item cursor-pointer" (click)="goBack()"><a><span class="fa fa-arrow-left mr-2"></span> Back |</a></li>
+    <li class="breadcrumb-item no-before"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a routerLink="/db-connector">Connector management</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+  </ol>
+</nav>
+
+<div class="card card-body m-3 card-main-content">
+  <div class="row justify-content-center py-5">
+    <div class="col-lg-8 mb-4">
+      <div class="schedule-status">
+        <label class="display-type ">Type</label>
+        <div class="form-check form-check-inline">
+          <input type="radio" id="configTypeJson" name="newSchedule.status" [value]="'JSON'" (click)="changeType('JSON')"
+                 [checked]="configType==='JSON'" class="form-check-input">
+          <label for="configTypeJson" class="form-check-label">Json</label>
+        </div>
+        <div class="form-check form-check-inline pl-0">
+          <input type="radio" id="configTypeField" name="newSchedule.status" [value]="'FIELD'" disabled (click)="changeType('FIELD')"
+                 [checked]="configType==='FIELD'" class="form-check-input">
+          <label for="configTypeField" class="form-check-label">Field</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="json-type" *ngIf="configType==='JSON'">
+        <div class="form-group">
+          <label class="control-label required mb-1">JSON config</label>
+          <json-editor [options]="editorOptions" [data]="originJsonConfig" (change)="onChangeJson($event)"></json-editor>
+          <div class="form-message mb-3">
+            <div class="alert-danger p-2" *ngIf="errorMsg">{{errorMsg}}</div>
+          </div>
+        </div>
+        <div class="area-example">
+          <span class="style-json-example" (click)="openJsonOracleExample(viewJsonOracleExample)">Json config oracle example</span>
+          <span class="style-json-example" (click)="openJsonPostgresExample(viewJsonPostgresExample)">Json config postgres example</span>
+        </div>
+      </div>
+      <div class="field-type" *ngIf="configType==='FIELD'">
+        <div style="color: red; margin-bottom: 10px;" *ngIf="errorMsg">{{errorMsg}}</div>
+        <div class="form-group">
+          <label class="control-label required" for="name">Connector Name</label>
+          <input class="form-control" type="text" id="name" [(ngModel)]="config.name"
+                 placeholder="Connector Name">
+        </div>
+        <div class="form-group">
+          <label class="control-label required" for="connectorClass">Connector Class: </label>
+          <input class="form-control" type="text" id="connectorClass"
+                 [(ngModel)]="config.connectorClass" placeholder="connectorClass">
+        </div>
+        <div class="form-group">
+          <label class="control-label required" for="resetOffset">Reset offset</label>
+          <input class="form-control" type="text" id="resetOffset" [(ngModel)]="config.resetOffset"
+                 placeholder="resetOffset">
+        </div>
+        <div class="form-group">
+          <label class="control-label required" for="dbHostname">Db hostname</label>
+          <input class="form-control" type="text" id="dbHostname" [(ngModel)]="config.dbHostname"
+                 placeholder="dbHostname">
+        </div>
+        <div class="form-group">
+          <label for="tasksMax">Tasks max</label>
+          <input class="form-control" type="text" id="tasksMax" [(ngModel)]="config.tasksMax"
+                 placeholder="tasksMax">
+        </div>
+        <div class="form-group">
+          <label for="dbUserPassword">Db User Password</label>
+          <input class="form-control" type="text" id="dbUserPassword"
+                 [(ngModel)]="config.dbUserPassword" placeholder="dbUserPassword">
+        </div>
+        <div class="form-group">
+          <label for="driverClassName">Table Blacklist</label>
+          <input class="form-control" type="text" id="driverClassName"
+                 [(ngModel)]="config.tableBlacklist" placeholder="tableBlacklist">
+        </div>
+        <div class="form-group">
+          <label for="tableWhitelist">Table Whitelist</label>
+          <input class="form-control" type="text" id="tableWhitelist"
+                 [(ngModel)]="config.tableWhitelist" placeholder="tableWhitelist">
+        </div>
+        <div class="form-group">
+          <label for="dbUser">Db User</label>
+          <input class="form-control" type="text" id="dbUser" [(ngModel)]="config.dbUser"
+                 placeholder="dbUser">
+        </div>
+        <div class="form-group">
+          <label for="dbPort">Db Port</label>
+          <input class="form-control" type="text" id="dbPort" [(ngModel)]="config.dbPort"
+                 placeholder="dbPort">
+        </div>
+        <div class="form-group">
+          <label for="dbFetchSize">Db fetch size</label>
+          <input class="form-control" type="text" id="dbFetchSize" [(ngModel)]="config.dbFetchSize"
+                 placeholder="dbFetchSize">
+        </div>
+        <div class="form-group">
+          <label for="multitenant">Multitenant</label>
+          <input class="form-control" type="text" id="multitenant" [(ngModel)]="config.multitenant"
+                 placeholder="multitenant">
+        </div>
+        <div class="form-group">
+          <label for="topic">Topic</label>
+          <input class="form-control" type="text" id="topic" [(ngModel)]="config.topic"
+                 placeholder="topic">
+        </div>
+        <div class="form-group">
+          <label for="parseDmlData">Parse dml data</label>
+          <input class="form-control" type="text" id="parseDmlData" [(ngModel)]="config.parseDmlData"
+                 placeholder="parseDmlData">
+        </div>
+        <div class="form-group">
+          <label for="dbName">Db name</label>
+          <input class="form-control" type="text" id="dbName" [(ngModel)]="config.dbName"
+                 placeholder="dbName">
+        </div>
+        <div class="form-group">
+          <label for="dbNameAlias">Db name alias</label>
+          <input class="form-control" type="text" id="dbNameAlias" [(ngModel)]="config.dbNameAlias"
+                 placeholder="dbNameAlias">
+        </div>
+      </div>
+
+      <div class="btns">
+        <button type="button" class="btn btn-outline-primary add-new mr-5" (click)="upSert()">{{isEdit ?
+          'Update' : 'Create'}}</button>
+        <button type="button" class="btn btn-outline-primary "
+                routerLink="/db-connector">Cancel
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #viewJsonOracleExample let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Connector Config example</h4>
+    <button type="button" class="close" aria-label="Close" (click)="onCloseModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="synInfo-container">
+      <div style="word-wrap: break-word;">
+        <pre id="connector-jsonOracleExample-id"></pre>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #viewJsonPostgresExample let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Connector Config example</h4>
+    <button type="button" class="close" aria-label="Close" (click)="onCloseModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="synInfo-container">
+      <div style="word-wrap: break-word;">
+        <pre id="connector-jsonPostgresExample-id"></pre>
+      </div>
+    </div>
+  </div>
+</ng-template>

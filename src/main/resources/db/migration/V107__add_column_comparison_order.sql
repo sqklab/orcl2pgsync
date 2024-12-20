@@ -1,0 +1,1 @@
+ALTER TABLE public.tbl_db_comparison_info ADD comparison_order integer;

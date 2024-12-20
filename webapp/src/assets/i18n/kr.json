@@ -1,0 +1,16 @@
+{
+  "home": {
+    "title": "Data Synchronization",
+    "welcome_text": "Your welcome text"
+  },
+  "synchronizer": {
+    "btn.synchronizer.title": "KR: Synchronizer",
+    "btn.import.title": "KR: Import"
+  },
+  "menu": {
+    "synchronizer.title": "Synchronizer"
+  },
+  "settings": {
+    "title": "Settings page"
+  }
+}

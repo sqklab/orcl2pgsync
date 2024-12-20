@@ -1,0 +1,320 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'jacoco'
+}
+
+group = 'com.lguplus.fleta'
+version = '0.3.10'
+
+java {
+	sourceCompatibility = '11'
+}
+
+apply plugin: 'idea'
+
+idea {
+	module {
+		inheritOutputDirs = false
+		outputDir = file("$buildDir/classes/main/")
+	}
+}
+
+jacoco {
+	// JaCoCo version
+	toolVersion = '0.8.5'
+
+	//  report path (default: "$/jacoco")
+//	reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+springBoot {
+	buildInfo()
+}
+
+repositories {
+	mavenCentral()
+
+	maven {
+		url "https://raw.githubusercontent.com/iptv-devops/maven-repository/main"
+		metadataSources {
+			gradleMetadata()
+		}
+	}
+}
+ext {
+	set('springCloudVersion', "2020.0.4")
+}
+
+bootJar {
+	archiveFileName = 'application.jar'
+}
+
+dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-stream'
+	implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
+	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-configuration-processor'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'net.javacrumbs.shedlock:shedlock-spring:4.43.0'
+	implementation 'net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.43.0'
+	implementation 'javax.websocket:javax.websocket-api:1.1'
+	implementation 'com.google.code.gson:gson:2.7'
+	implementation 'commons-dbcp:commons-dbcp:1.4'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.12.5'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.5'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.13.4'
+	implementation 'org.postgresql:postgresql:42.3.3'
+    testImplementation 'org.projectlombok:lombok:1.18.22'
+	testImplementation 'org.projectlombok:lombok:1.18.22'
+	annotationProcessor 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'org.apache.commons:commons-collections4:4.4'
+	implementation 'commons-io:commons-io:2.11.0'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	// api documentation
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'com.github.xiaoymin:knife4j-spring-ui:3.0.3'
+	implementation 'com.github.xiaoymin:knife4j-springdoc-ui:3.0.3'
+
+	implementation group: 'org.sql2o', name: 'sql2o', version: '1.4.0' // use it for unit test only
+	implementation 'org.flywaydb:flyway-core:7.15.0'
+	implementation 'io.dropwizard.metrics:metrics-core:4.1.2'
+	implementation 'com.codahale.metrics:metrics-healthchecks:3.0.1'
+	implementation 'org.modelmapper:modelmapper:2.1.1'
+
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+	implementation 'org.apache.poi:poi-ooxml:5.2.2'
+	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+
+	//	for thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.3'
+
+	// developmentOnly
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Just for test, verify synchronization
+	implementation 'com.oracle.database.jdbc:ucp:19.6.0.0'
+	implementation 'commons-dbutils:commons-dbutils:1.7'
+
+	implementation 'com.codahale.metrics:metrics-healthchecks:3.0.1'
+
+	//AWS
+	implementation(platform("software.amazon.awssdk:bom:2.17.86"))
+	implementation 'software.amazon.awssdk:ssm'
+	implementation 'software.amazon.awssdk:sts'
+	implementation 'software.amazon.awssdk:auth'
+
+
+	implementation 'org.springframework:spring-beans:5.3.9'
+//	implementation ('org.springframework.boot:spring-boot-starter-data-redis')
+	implementation 'org.apache.commons:commons-pool2:2.11.1'
+	implementation 'com.jayway.jsonpath:json-path:2.6.0'
+	implementation 'com.zaxxer:HikariCP:4.0.3'
+
+	implementation ('com.oracle.database.jdbc:ojdbc8:19.6.0.0') {
+		exclude group: 'com.oracle.database.ha', module: 'simplefan'
+		exclude group: 'com.oracle.database.ha', module: 'ons'
+	}
+	implementation 'com.slack.api:slack-api-client:1.13.0'
+	implementation 'com.vladmihalcea:hibernate-types-55:2.14.0'
+
+	implementation 'org.apache.httpcomponents:httpclient:4.5'
+	implementation 'org.apache.kafka:connect-api:3.0.0'
+
+	// retrofit
+	implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.9.0'
+	implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.9.0'
+	implementation group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.9.0'
+
+	// Guava is a set of core Java libraries from Google that includes new collection types (such as multimap and multiset),
+	// immutable collections, a graph library, and utilities for concurrency, I/O, hashing, caching, primitives, strings,
+	// and more!
+	//
+	// Refer to https://guava.dev/
+	implementation("com.google.guava:guava:31.0.1-jre")
+
+	implementation "com.google.auto.value:auto-value-annotations:1.6.5"
+	implementation "com.github.h908714124:auto-builder-annotations:1.0"
+	annotationProcessor "com.google.auto.value:auto-value:1.6.5"
+	annotationProcessor "com.github.h908714124:auto-builder:2.9.3"
+
+	implementation group: 'org.jooq', name: 'jool', version: '0.9.14'
+
+	// UI LogViewer for monitoring server logs in real-time in the browser
+	implementation 'io.github.sevdokimov.logviewer:log-viewer-spring-boot:1.0.3'
+
+	// https://mvnrepository.com/artifact/com.github.jsqlparser/jsqlparser
+	implementation group: 'com.github.jsqlparser', name: 'jsqlparser', version: '4.3'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework:spring-test:5.3.22'
+	testImplementation 'junit:junit:4.13.2'
+	testImplementation group: 'org.awaitility', name: 'awaitility', version: '4.1.1'
+	testImplementation group: 'org.hamcrest', name: 'hamcrest-core', version: '2.2'
+	implementation group: 'org.keycloak', name: 'keycloak-spring-boot-starter', version: '12.0.4'
+	implementation group: 'org.keycloak', name: 'keycloak-admin-client', version: '12.0.4'
+
+	testImplementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.7.0'
+
+//	testImplementation 'com.querydsl:querydsl-jpa:5.0.0'
+//	testImplementation 'com.querydsl:querydsl-core:5.0.0'
+//	testAnnotationProcessor "com.querydsl:querydsl-apt:5.0.0:jpa"
+//	testAnnotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+//	testAnnotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'com.lguplus.iptv:config-custom-exchanger:0.0.9'
+}
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+test {
+	useJUnitPlatform()
+	maxHeapSize = "16384m"
+//	jvmArgs "-XX:MaxPermSize=512"
+
+	filter {
+	}
+	testLogging {
+		events "failed"
+		showStandardStreams false
+		showStackTraces false
+		showExceptions false
+	}
+	jacoco {
+		enabled = true
+//		destinationFile = file("$buildDir/jacoco/$.exec")
+//		includes = []
+//		excludes = []
+//		excludeClassLoaders = []
+//		includeNoLocationClasses = false
+//		sessionId = "<auto-generated value>"
+//		dumpOnExit = true
+//		classDumpDir = null
+//		output = JacocoTaskExtension.Output.FILE
+//		address = "localhost"
+//		port = 6300
+//		jmx = false
+	}
+}
+
+
+sourceSets {
+	integrationTest {
+		java.srcDir "$projectDir/src/integrationTest/java"
+		resources.srcDir "$projectDir/src/integrationTest/resources"
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
+	}
+}
+
+configurations {
+	integrationTestAnnotationProcessor.extendsFrom testAnnotationProcessor
+	integrationTestImplementation.extendsFrom implementation
+	integrationTestImplementation.extendsFrom testImplementation
+	integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+task integrationTest(type: Test) {
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	useJUnitPlatform()
+}
+
+jacocoTestReport {
+	getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
+
+	reports {
+		// 원하는 리포트를 켜고 끌 수 있습니다.
+		html.required = true
+		xml.required = false
+		csv.required = false
+
+//  각 리포트 타입 마다 리포트 저장 경로를 설정할 수 있습니다.
+//  		html.destination file("$buildDir/jacocoHtml")
+//  xml.destination file("$buildDir/jacoco.xml")
+	}
+}
+
+jacocoTestCoverageVerification {
+	// 이 커버리지 기준은 이 글의 맨 아래에서 다시 설명하겠습니다.
+	violationRules {
+		rule {
+			// 룰을 간단히 켜고 끌 수 있습니다.
+			enabled = true
+
+			// 룰을 체크할 단위는 클래스 단위
+			element = 'CLASS'
+
+			// 브랜치 커버리지를 최소한 90% 만족시켜야 합니다.
+			limit {
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				minimum = 0.60
+			}
+
+			limit{
+				counter = 'METHOD'
+				value = 'COVEREDRATIO'
+				minimum = 1.00
+			}
+
+//			// 라인 커버리지를 최소한 80% 만족시켜야 합니다.
+//			limit {
+//				counter = 'LINE'
+//				value = 'COVEREDRATIO'
+//				minimum = 0.80
+//			}
+//
+//			// 빈 줄을 제외한 코드의 라인수를 최대 200라인으로 제한합니다.
+//			limit {
+//				counter = 'LINE'
+//				value = 'TOTALCOUNT'
+//				maximum = 200
+//			}
+		}
+	}
+}
+
+task testCoverage(type: Test) {
+	group 'verification'
+	description 'Runs the unit tests with coverage'
+
+	dependsOn(':test',
+			':jacocoTestReport',
+			':jacocoTestCoverageVerification')
+
+	tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
+	tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
+}
+
+task printVersion {
+	doLast {
+		println version
+	}
+}
+bootRun {
+   systemProperties = System.properties
+}

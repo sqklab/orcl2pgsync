@@ -1,0 +1,107 @@
+table {
+    width: 100%;
+}
+
+.state {
+    width: 30px;
+}
+
+.error-time {
+    width: 150px;
+    cursor: initial;
+}
+
+.error-message {
+    max-width: 300px;
+    word-wrap: break-word;
+}
+.sql-redo{
+  max-width: 300px;
+  max-height: 300px;
+}
+.sync-message {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-area {
+    display: flex;
+    justify-content: space-between;
+    .btn-search {
+        margin-left: 10px;
+    }
+}
+
+.search-error-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    span {
+        margin-right: 10px;
+    }
+}
+
+.search-error-type {
+    display: flex;
+    align-items: center;
+    .text-search {
+        width: 250px;
+    }
+    span {
+        margin-right: 10px;
+    }
+    button {
+        margin-left: 10px;
+    }
+    select {
+        width: 400px;
+    }
+}
+
+.group-search {
+    position: relative;
+    .bi {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+    }
+}
+
+.infomation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0;
+    .running {
+        color: #198754;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .stopped {
+        color: #dc3545;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .pending {
+        color: #949394;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    span {
+        margin-right: 20px;
+        margin-left: 5px;
+    }
+    .seclected-state {
+        font-size: 15px;
+        font-weight: bold;
+    }
+}

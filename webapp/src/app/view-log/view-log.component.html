@@ -1,0 +1,57 @@
+<nav aria-label="breadcrumb" class="border-bottom shadow-sm bg-white p-3">
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item cursor-pointer" (click)="goBack()"><a><span class="fa fa-arrow-left mr-2"></span> Back |</a></li>
+    <li class="breadcrumb-item no-before"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+  </ol>
+</nav>
+<div class="card card-body m-3 card-main-content">
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr>
+          <th class="text-center no" scope="col">No</th>
+          <th class="text-center" scope="col">File name</th>
+          <th class="text-center" scope="col">Size</th>
+          <th class="text-center" scope="col">Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of logs;let i = index">
+          <td class="text-center">{{doc.index}}</td>
+          <td>
+             <a class="view-log" style="cursor: pointer;" *ngIf="doc.isLogFile" (click)="open(content, doc.name)">{{doc.name}}</a>
+             <span *ngIf="!doc.isLogFile">{{doc.name}}</span>
+            </td>
+          <td class="text-center"> {{ doc.size }} </td>
+          <td class="text-center">
+            <a class="download" style="cursor: pointer;" (click)="downloadFile(doc.path, doc.name)">Download</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  <div class="no-data" *ngIf="totalPage===0">No data</div>
+  <app-pavigation [totalPage]="totalPage" (onChangePage)="handleChangePage($event)" [hidePageSize]="true"></app-pavigation>
+</div>
+
+<ng-template #content>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title"> {{logFileName}}</h5>
+    <button type="button" class="close" aria-label="Close" (click)="onCloseSetting()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body shadow-lg">
+    <div class="container-fluid p-0 content">
+      <table>
+        <th></th>
+        <th></th>
+        <tbody>
+          <tr *ngFor="let msg of messages;let i=index">
+            <td class="number text-center"><span class="number-text">{{i+1}}</span></td>
+            <td><span class="line">{{msg}}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-template>

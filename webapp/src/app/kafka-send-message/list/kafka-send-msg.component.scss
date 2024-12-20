@@ -1,0 +1,19 @@
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.oralce-msg {
+    border: 1px solid #cecece;
+    padding: 1em;
+    background-color: #e9ecef;
+}
+
+.topic-name {
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.card-main-content {
+  min-height: calc(100vh - 180px);
+}
