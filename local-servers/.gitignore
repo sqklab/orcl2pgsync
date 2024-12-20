@@ -1,9 +1,0 @@
-/volume
-/volume_backup
-/backup
-ssm*.json
-secretsmanager*.json
-/connect
-.env
-/debezium-source
-/vagrant/vagrant_data/12.2.0.1/linuxx64_12201_database.zip

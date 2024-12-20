@@ -1,1 +1,0 @@
-ALTER TABLE "tbl_sync_task_info" ADD is_batch boolean default true not null;
